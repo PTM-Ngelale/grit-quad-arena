@@ -27,11 +27,11 @@ function buildNotificationEmail(data: Record<string, string>): string {
 <body style="margin:0;padding:0;background:#0D0D0D;font-family:Inter,Arial,sans-serif;">
   <table width="100%" cellpadding="0" cellspacing="0" style="background:#0D0D0D;padding:40px 20px;">
     <tr><td align="center">
-      <table width="560" cellpadding="0" cellspacing="0" style="background:#1A1A1A;border-top:3px solid #F5520C;">
+      <table width="560" cellpadding="0" cellspacing="0" style="background:#1A1A1A;border-top:3px solid #CC1111;">
         <!-- Header -->
         <tr>
           <td style="padding:32px 40px 24px;">
-            <p style="margin:0 0 4px;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#F5520C;">New Booking Request</p>
+            <p style="margin:0 0 4px;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#CC1111;">New Booking Request</p>
             <h1 style="margin:0;font-size:28px;color:#F2EDE6;font-weight:800;">${data.name}</h1>
             <p style="margin:6px 0 0;font-size:14px;color:#6B6B6B;">${duration}</p>
           </td>
@@ -68,7 +68,7 @@ function buildNotificationEmail(data: Record<string, string>): string {
         <tr>
           <td style="padding:0 40px 40px;">
             <a href="https://wa.me/${data.phone?.replace(/^0/, '234').replace(/\s/g, '')}"
-               style="display:inline-block;background:#F5520C;color:#fff;text-decoration:none;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:12px 24px;">
+               style="display:inline-block;background:#CC1111;color:#fff;text-decoration:none;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:12px 24px;">
               Reply on WhatsApp →
             </a>
           </td>
@@ -97,10 +97,10 @@ function buildConfirmationEmail(data: Record<string, string>): string {
 <body style="margin:0;padding:0;background:#0D0D0D;font-family:Inter,Arial,sans-serif;">
   <table width="100%" cellpadding="0" cellspacing="0" style="background:#0D0D0D;padding:40px 20px;">
     <tr><td align="center">
-      <table width="560" cellpadding="0" cellspacing="0" style="background:#1A1A1A;border-top:3px solid #F5520C;">
+      <table width="560" cellpadding="0" cellspacing="0" style="background:#1A1A1A;border-top:3px solid #CC1111;">
         <tr>
           <td style="padding:40px 40px 24px;text-align:center;">
-            <p style="margin:0 0 8px;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#F5520C;">Booking Received</p>
+            <p style="margin:0 0 8px;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#CC1111;">Booking Received</p>
             <h1 style="margin:0 0 8px;font-size:32px;color:#F2EDE6;font-weight:800;">We got you, ${data.name.split(' ')[0]}.</h1>
             <p style="margin:0;font-size:14px;color:#6B6B6B;max-width:380px;margin:8px auto 0;">Your request has been received. We'll confirm your slot via WhatsApp or phone within 24 hours.</p>
           </td>
@@ -127,7 +127,7 @@ function buildConfirmationEmail(data: Record<string, string>): string {
           <td style="padding:0 40px 40px;text-align:center;">
             <p style="margin:0 0 20px;font-size:13px;color:#6B6B6B;">Questions? Reach us on WhatsApp:</p>
             <a href="https://wa.me/2348078591455"
-               style="display:inline-block;background:#F5520C;color:#fff;text-decoration:none;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:12px 24px;">
+               style="display:inline-block;background:#CC1111;color:#fff;text-decoration:none;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:12px 24px;">
               Chat on WhatsApp
             </a>
           </td>

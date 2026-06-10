@@ -6,7 +6,7 @@ const config: Config = {
     extend: {
       colors: {
         'grit-black':  '#0D0D0D',
-        'grit-orange': '#F5520C',
+        'grit-orange': '#CC1111',
         'grit-sand':   '#C9A96E',
         'grit-white':  '#F2EDE6',
         'grit-grey':   '#1A1A1A',
