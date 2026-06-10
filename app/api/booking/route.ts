@@ -169,7 +169,7 @@ export async function POST(req: NextRequest) {
     await resend.emails.send({
       from: 'GRIT Arena Bookings <onboarding@resend.dev>',
       to: ['gritarena@outlook.com'],
-      reply_to: body.email || undefined,
+      replyTo: body.email || undefined,
       subject: `New Booking — ${body.name} · ${DURATION_LABELS[body.duration] ?? body.duration}`,
       html: buildNotificationEmail(body),
     })
