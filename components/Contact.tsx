@@ -98,9 +98,17 @@ export default function Contact() {
 
           {/* Map placeholder + WhatsApp CTA */}
           <div data-reveal className="opacity-0-init">
-            {/* [PLACEHOLDER] — replace with real Google Maps embed iframe */}
-            <div className="h-72 bg-grit-grey flex items-center justify-center mb-6">
-              <span className="font-body text-grit-muted text-sm">[Map Embed Coming Soon]</span>
+            <div className="h-72 overflow-hidden mb-6">
+              <iframe
+                src="https://maps.google.com/maps?q=GRIT+Quad+Biking+Arena+Port+Harcourt&output=embed"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title="GRIT Quad Biking Arena on Google Maps"
+              />
             </div>
             <a
               href="https://wa.me/2348078591455"
