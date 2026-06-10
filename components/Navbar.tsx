@@ -1,5 +1,7 @@
 'use client'
 import { useState } from 'react'
+import Image from 'next/image'
+import CountdownBanner from '@/components/CountdownBanner'
 
 const navLinks = [
   { href: '/#about',       label: 'About' },
@@ -15,25 +17,35 @@ export default function Navbar() {
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-black/60 backdrop-blur-md">
+      {/* Countdown ribbon — renders only before event date */}
+      <CountdownBanner />
+
+      {/* Main nav row */}
       <div className="max-w-6xl mx-auto px-6 flex items-center justify-between h-16">
         {/* Logo */}
-        <a href="#" className="flex items-baseline gap-2">
-          <span className="font-display text-grit-orange text-3xl leading-none">GRIT</span>
-          <span className="font-body text-grit-white text-xs font-medium tracking-widest uppercase">Quad Arena</span>
+        <a href="/" className="flex items-center shrink-0">
+          <Image
+            src="/images/logo.jpg"
+            alt="GRIT Quad Biking Arena"
+            height={48}
+            width={36}
+            className="object-contain"
+            priority
+          />
         </a>
 
         {/* Desktop nav */}
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden md:flex items-center gap-6 lg:gap-8">
           {navLinks.map((link) => (
             <a
               key={link.href}
               href={link.href}
-              className="font-body text-grit-white text-sm tracking-wide hover:text-grit-orange transition-colors"
+              className="font-body text-grit-white text-sm tracking-wide hover:text-grit-orange transition-colors whitespace-nowrap"
             >
               {link.label}
             </a>
           ))}
-          <a href="/booking" className="grit-btn font-body text-sm font-semibold px-5 py-2">
+          <a href="/booking" className="grit-btn font-body text-sm font-semibold px-5 py-2 whitespace-nowrap">
             Book a Ride
           </a>
         </div>
