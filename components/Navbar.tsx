@@ -23,7 +23,7 @@ export default function Navbar() {
       {/* Main nav row */}
       <div className="max-w-6xl mx-auto px-6 flex items-center justify-between h-16">
         {/* Logo */}
-        <a href="/" className="flex items-center shrink-0">
+        <a href="/" className="flex items-center gap-2 shrink-0">
           <Image
             src="/images/logo.jpg"
             alt="GRIT Quad Biking Arena"
@@ -32,6 +32,9 @@ export default function Navbar() {
             className="object-contain"
             priority
           />
+          <span className="hidden sm:block font-display text-grit-white text-lg leading-none tracking-wide">
+            GRIT QUAD ARENA
+          </span>
         </a>
 
         {/* Desktop nav */}
