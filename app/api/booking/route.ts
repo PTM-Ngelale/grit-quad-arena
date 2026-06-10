@@ -1,8 +1,6 @@
 import { Resend } from 'resend'
 import { NextRequest, NextResponse } from 'next/server'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
-
 const DURATION_LABELS: Record<string, string> = {
   '5min':  '5 Minutes — ₦6,000',
   '10min': '10 Minutes — ₦10,000',
@@ -164,6 +162,8 @@ export async function POST(req: NextRequest) {
       console.log('[Booking received — no RESEND_API_KEY set]', body)
       return NextResponse.json({ success: true })
     }
+
+    const resend = new Resend(process.env.RESEND_API_KEY)
 
     // Notify the business
     await resend.emails.send({
