@@ -61,7 +61,7 @@ export default function Hero() {
       <div className="relative z-10 border-t border-white/10 py-3">
         <p className="font-body text-grit-muted text-xs text-center tracking-wide">
           Open:{' '}
-          <span className="text-grit-white/80">Fridays &amp; Saturdays, 10am – 6pm</span>
+          <span className="text-grit-white/80">Fri, Sat &amp; Sun · 10am – 6pm</span>
           {' · '}
           <span className="text-grit-white/80">[PLACEHOLDER ADDRESS]</span>, Port Harcourt, Rivers State
         </p>

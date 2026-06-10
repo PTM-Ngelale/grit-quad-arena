@@ -133,7 +133,7 @@ export default function GalleryPage() {
             {/* [PLACEHOLDER] — add submission email once ready */}
             <p className="font-body text-grit-muted text-sm">
               Tag us on Instagram or send your photos to{' '}
-              <span className="text-grit-sand">[PLACEHOLDER EMAIL]</span> to be featured.
+              <a href="mailto:gritarena@outlook.com" className="text-grit-sand hover:text-grit-orange transition-colors">gritarena@outlook.com</a> to be featured.
             </p>
           </div>
           <a

@@ -16,16 +16,16 @@ export default function BookingCTA() {
           >
             Book Online
           </a>
-          {/* [PLACEHOLDER] — replace tel: with real number */}
           <a
-            href="tel:[PLACEHOLDER]"
+            href="tel:+2348078591455"
             className="font-body font-semibold px-8 py-4 text-base bg-grit-black text-grit-white hover:bg-grit-grey transition-colors"
           >
             Call Us
           </a>
-          {/* [PLACEHOLDER] — replace with real WhatsApp number */}
           <a
-            href="https://wa.me/[PLACEHOLDER]"
+            href="https://wa.me/2348078591455"
+            target="_blank"
+            rel="noopener noreferrer"
             className="font-body font-semibold px-8 py-4 text-base bg-grit-white text-grit-black hover:bg-grit-white/80 transition-colors"
           >
             WhatsApp Us
@@ -33,7 +33,7 @@ export default function BookingCTA() {
         </div>
 
         <p className="font-body text-grit-black/60 text-sm">
-          Open Fridays &amp; Saturdays, 10am – 6pm
+          Open Fridays, Saturdays &amp; Sundays · 10am – 6pm
         </p>
       </div>
     </section>

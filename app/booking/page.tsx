@@ -113,7 +113,7 @@ export default function BookingPage() {
                     name="date"
                     className="w-full bg-grit-grey border border-grit-grey/80 text-grit-white font-body text-sm px-4 py-3 outline-none focus:border-grit-orange transition-colors"
                   />
-                  <p className="font-body text-grit-muted text-xs mt-1">Fridays &amp; Saturdays only</p>
+                  <p className="font-body text-grit-muted text-xs mt-1">Fridays, Saturdays &amp; Sundays only</p>
                 </div>
                 <div>
                   <label className="font-body text-grit-sand text-xs tracking-widest uppercase block mb-2">Number of Riders</label>
@@ -165,11 +165,11 @@ export default function BookingPage() {
                 </p>
                 <div className="flex flex-col gap-3">
                   {/* [PLACEHOLDER] — replace tel: with real number */}
-                  <a href="tel:[PLACEHOLDER]" className="font-body font-semibold px-6 py-3 text-sm bg-grit-grey text-grit-white hover:bg-grit-orange transition-colors text-center">
+                  <a href="tel:+2348078591455" className="font-body font-semibold px-6 py-3 text-sm bg-grit-grey text-grit-white hover:bg-grit-orange transition-colors text-center">
                     Call Us
                   </a>
                   {/* [PLACEHOLDER] — replace with real WhatsApp number */}
-                  <a href="https://wa.me/[PLACEHOLDER]" className="font-body font-semibold px-6 py-3 text-sm border border-grit-white/30 text-grit-white hover:border-grit-orange hover:text-grit-orange transition-colors text-center">
+                  <a href="https://wa.me/2348078591455" className="font-body font-semibold px-6 py-3 text-sm border border-grit-white/30 text-grit-white hover:border-grit-orange hover:text-grit-orange transition-colors text-center">
                     WhatsApp Us
                   </a>
                 </div>
@@ -196,7 +196,7 @@ export default function BookingPage() {
 
               <div className="border-t border-grit-grey pt-10">
                 <h3 className="font-display text-grit-white text-2xl leading-none mb-4">Opening Hours</h3>
-                <p className="font-body text-grit-white text-sm font-semibold">Fridays &amp; Saturdays</p>
+                <p className="font-body text-grit-white text-sm font-semibold">Fri, Sat &amp; Sun</p>
                 <p className="font-body text-grit-muted text-sm">10:00am – 6:00pm</p>
               </div>
 

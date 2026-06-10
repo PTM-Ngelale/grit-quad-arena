@@ -34,7 +34,7 @@ const trackModes = [
   {
     tag: 'TRACK MODE',
     title: 'Timed Laps',
-    description: 'Race against the clock. Timed laps put a competitive edge on your session — post your best time and challenge your crew.',
+    description: 'Race against the clock. Timed laps put a competitive edge on your session — post your best time, hit the leaderboard, and challenge your crew.',
     image: '/images/timed-laps.jpg',
     imageAlt: 'Timed Laps — riders at GRIT Quad Biking Arena at sunset',
   },
