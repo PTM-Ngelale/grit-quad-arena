@@ -2,10 +2,11 @@ import type { Metadata } from 'next'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import ScrollRevealProvider from '@/components/ScrollRevealProvider'
+import BookingForm from '@/components/BookingForm'
 
 export const metadata: Metadata = {
   title: 'Book a Ride — GRIT Quad Biking Arena',
-  description: 'Reserve your slot at GRIT Quad Biking Arena, Port Harcourt. Solo rides from ₦6,000. Group deals available. Open Fridays & Saturdays, 10am–6pm.',
+  description: 'Reserve your slot at GRIT Quad Biking Arena, Port Harcourt. Solo rides from ₦6,000. Group deals available. Open Fridays, Saturdays & Sundays, 10am–6pm.',
 }
 
 const soloRides = [
@@ -31,7 +32,7 @@ export default function BookingPage() {
         </div>
       </section>
 
-      {/* Pricing reference */}
+      {/* Pricing quick-ref */}
       <section className="py-16 bg-grit-grey border-b border-grit-black">
         <div className="max-w-6xl mx-auto px-6">
           <p className="font-body text-grit-sand text-xs tracking-widest uppercase mb-6">Solo Ride Prices</p>
@@ -55,9 +56,9 @@ export default function BookingPage() {
             ))}
           </div>
           <p className="font-body text-grit-muted text-xs mt-4">
-            Group deals available — see{' '}
-            <a href="/#pricing" className="text-grit-sand hover:text-grit-orange transition-colors underline-offset-2 underline">
-              full pricing
+            Group deals available —{' '}
+            <a href="/#pricing" className="text-grit-sand hover:text-grit-orange transition-colors underline underline-offset-2">
+              see full pricing
             </a>{' '}
             for group rates (3–6 riders).
           </p>
@@ -68,108 +69,35 @@ export default function BookingPage() {
       <section className="py-24 bg-grit-black">
         <div className="max-w-6xl mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
-            {/* Booking form */}
-            <div data-reveal className="opacity-0-init">
+            {/* Live booking form */}
+            <div>
               <h2 className="font-display text-grit-white text-4xl leading-none mb-8">Your Details</h2>
-              {/* [PLACEHOLDER] — wire up to real booking system / form handler */}
-              <form className="space-y-5" action="#" method="POST">
-                <div>
-                  <label className="font-body text-grit-sand text-xs tracking-widest uppercase block mb-2">Full Name</label>
-                  <input
-                    type="text"
-                    name="name"
-                    placeholder="Your name"
-                    className="w-full bg-grit-grey border border-grit-grey/80 text-grit-white font-body text-sm px-4 py-3 outline-none focus:border-grit-orange transition-colors placeholder:text-grit-muted"
-                  />
-                </div>
-                <div>
-                  <label className="font-body text-grit-sand text-xs tracking-widest uppercase block mb-2">Phone Number</label>
-                  <input
-                    type="tel"
-                    name="phone"
-                    placeholder="e.g. 080XXXXXXXX"
-                    className="w-full bg-grit-grey border border-grit-grey/80 text-grit-white font-body text-sm px-4 py-3 outline-none focus:border-grit-orange transition-colors placeholder:text-grit-muted"
-                  />
-                </div>
-                <div>
-                  <label className="font-body text-grit-sand text-xs tracking-widest uppercase block mb-2">Ride Duration</label>
-                  <select
-                    name="duration"
-                    className="w-full bg-grit-grey border border-grit-grey/80 text-grit-white font-body text-sm px-4 py-3 outline-none focus:border-grit-orange transition-colors"
-                  >
-                    <option value="">Select a duration</option>
-                    {soloRides.map((ride) => (
-                      <option key={ride.id} value={ride.id}>
-                        {ride.label} — {ride.price}
-                      </option>
-                    ))}
-                    <option value="group">Group Ride (3–6 riders)</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="font-body text-grit-sand text-xs tracking-widest uppercase block mb-2">Preferred Date</label>
-                  <input
-                    type="date"
-                    name="date"
-                    className="w-full bg-grit-grey border border-grit-grey/80 text-grit-white font-body text-sm px-4 py-3 outline-none focus:border-grit-orange transition-colors"
-                  />
-                  <p className="font-body text-grit-muted text-xs mt-1">Fridays, Saturdays &amp; Sundays only</p>
-                </div>
-                <div>
-                  <label className="font-body text-grit-sand text-xs tracking-widest uppercase block mb-2">Number of Riders</label>
-                  <input
-                    type="number"
-                    name="riders"
-                    min="1"
-                    max="20"
-                    placeholder="1"
-                    className="w-full bg-grit-grey border border-grit-grey/80 text-grit-white font-body text-sm px-4 py-3 outline-none focus:border-grit-orange transition-colors placeholder:text-grit-muted"
-                  />
-                </div>
-                <div className="flex items-start gap-3">
-                  <input
-                    type="checkbox"
-                    id="shuttle"
-                    name="shuttle"
-                    className="mt-1 accent-grit-orange"
-                  />
-                  <label htmlFor="shuttle" className="font-body text-grit-white/70 text-sm leading-relaxed cursor-pointer">
-                    I need shuttle pickup (groups of 4+ only, 24hrs notice required, 30% deposit)
-                  </label>
-                </div>
-                <div>
-                  <label className="font-body text-grit-sand text-xs tracking-widest uppercase block mb-2">Additional Notes</label>
-                  <textarea
-                    name="notes"
-                    rows={4}
-                    placeholder="Shuttle pickup point, group activity preferences, special requests..."
-                    className="w-full bg-grit-grey border border-grit-grey/80 text-grit-white font-body text-sm px-4 py-3 outline-none focus:border-grit-orange transition-colors placeholder:text-grit-muted resize-none"
-                  />
-                </div>
-                {/* [PLACEHOLDER] — form submission not yet wired; connect to email/backend */}
-                <button type="submit" className="grit-btn w-full font-body font-semibold text-sm py-4">
-                  Submit Booking Request
-                </button>
-                <p className="font-body text-grit-muted text-xs text-center">
-                  We&apos;ll confirm your slot via WhatsApp or phone within 24 hours.
-                </p>
-              </form>
+              <BookingForm />
             </div>
 
             {/* Sidebar */}
-            <div data-reveal className="opacity-0-init space-y-10">
+            <div className="space-y-10">
               <div>
                 <h3 className="font-display text-grit-white text-3xl leading-none mb-6">Prefer to Call?</h3>
                 <p className="font-body text-grit-white/70 text-sm leading-relaxed mb-6">
                   Walk in anytime during opening hours or reach us directly — we&apos;ll get you sorted on the spot.
                 </p>
                 <div className="flex flex-col gap-3">
-                  {/* [PLACEHOLDER] — replace tel: with real number */}
                   <a href="tel:+2348078591455" className="font-body font-semibold px-6 py-3 text-sm bg-grit-grey text-grit-white hover:bg-grit-orange transition-colors text-center">
-                    Call Us
+                    0807 859 1455
                   </a>
-                  {/* [PLACEHOLDER] — replace with real WhatsApp number */}
-                  <a href="https://wa.me/2348078591455" className="font-body font-semibold px-6 py-3 text-sm border border-grit-white/30 text-grit-white hover:border-grit-orange hover:text-grit-orange transition-colors text-center">
+                  <a href="tel:+2347025165644" className="font-body font-semibold px-6 py-3 text-sm bg-grit-grey text-grit-white hover:bg-grit-orange transition-colors text-center">
+                    0702 516 5644
+                  </a>
+                  <a href="tel:+2347040820199" className="font-body font-semibold px-6 py-3 text-sm bg-grit-grey text-grit-white hover:bg-grit-orange transition-colors text-center">
+                    0704 082 0199
+                  </a>
+                  <a
+                    href="https://wa.me/2348078591455"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-body font-semibold px-6 py-3 text-sm border border-grit-white/30 text-grit-white hover:border-grit-orange hover:text-grit-orange transition-colors text-center"
+                  >
                     WhatsApp Us
                   </a>
                 </div>
@@ -207,9 +135,7 @@ export default function BookingPage() {
                     'Helmets and safety gear provided',
                     'Walk-ins welcome — subject to availability',
                     'Group bookings recommended 24hrs in advance',
-                    // [PLACEHOLDER] — confirm minimum age
                     'Minimum rider age: [PLACEHOLDER]',
-                    // [PLACEHOLDER] — confirm refund/cancellation policy
                     'Refund policy: [PLACEHOLDER]',
                   ].map((item) => (
                     <li key={item} className="font-body text-grit-white/70 text-sm flex items-start gap-2">
