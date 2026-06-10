@@ -32,9 +32,8 @@ export default function BookingCTA() {
           </a>
         </div>
 
-        {/* [PLACEHOLDER] — replace with real days and hours */}
         <p className="font-body text-grit-black/60 text-sm">
-          Open [PLACEHOLDER DAYS], [PLACEHOLDER HOURS]
+          Open Fridays &amp; Saturdays, 10am – 6pm
         </p>
       </div>
     </section>

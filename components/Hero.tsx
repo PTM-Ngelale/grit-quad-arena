@@ -1,8 +1,19 @@
+import Image from 'next/image'
+
 export default function Hero() {
   return (
     <section className="relative min-h-screen flex flex-col bg-grit-black overflow-hidden">
-      {/* Background gradient — swap for real image once available */}
-      <div className="absolute inset-0 bg-gradient-to-br from-grit-black via-grit-black/95 to-grit-grey" />
+      {/* Real background photo */}
+      <div className="absolute inset-0">
+        <Image
+          src="/images/biking-in-motion.jpg"
+          alt="Riders kicking up dust at GRIT Quad Biking Arena"
+          fill
+          className="object-cover object-center"
+          priority
+        />
+        <div className="absolute inset-0 bg-grit-black/65" />
+      </div>
 
       {/* Giant GRIT watermark */}
       <div
@@ -10,7 +21,7 @@ export default function Hero() {
         className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden"
       >
         <span
-          className="font-display text-grit-grey/20 leading-none"
+          className="font-display text-white/5 leading-none"
           style={{ fontSize: '35vw' }}
         >
           GRIT
@@ -47,10 +58,10 @@ export default function Hero() {
       </div>
 
       {/* Bottom info strip */}
-      <div className="relative z-10 border-t border-grit-grey/50 py-3">
+      <div className="relative z-10 border-t border-white/10 py-3">
         <p className="font-body text-grit-muted text-xs text-center tracking-wide">
           Open:{' '}
-          <span className="text-grit-white/80">[PLACEHOLDER HOURS]</span>
+          <span className="text-grit-white/80">Fridays &amp; Saturdays, 10am – 6pm</span>
           {' · '}
           <span className="text-grit-white/80">[PLACEHOLDER ADDRESS]</span>, Port Harcourt, Rivers State
         </p>

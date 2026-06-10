@@ -52,17 +52,42 @@ export default function Contact() {
             </div>
             <div>
               <p className="font-body text-grit-sand text-xs tracking-widest uppercase mb-2">Opening Hours</p>
-              {/* [PLACEHOLDER] — replace with real hours */}
-              <p className="font-body text-grit-white text-sm">[PLACEHOLDER]</p>
+              <p className="font-body text-grit-white text-sm">Fridays &amp; Saturdays</p>
+              <p className="font-body text-grit-muted text-sm">10:00am – 6:00pm</p>
+            </div>
+
+            {/* Shuttle service info */}
+            <div className="border-t border-grit-grey pt-8">
+              <p className="font-body text-grit-sand text-xs tracking-widest uppercase mb-3">Shuttle Service</p>
+              <p className="font-body text-grit-white/60 text-xs leading-relaxed mb-3">
+                Available for groups of 4+ with 24hrs notice. 30% deposit required.
+              </p>
+              <div className="space-y-1">
+                <div className="flex justify-between items-center">
+                  <span className="font-body text-grit-white/70 text-xs">Genesis — Ada George</span>
+                  <span className="font-body text-grit-sand text-sm ml-4">₦4,000 pp</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="font-body text-grit-white/70 text-xs">Genesis — Trans Amadi</span>
+                  <span className="font-body text-grit-sand text-sm ml-4">₦3,000 pp</span>
+                </div>
+              </div>
             </div>
           </div>
 
           {/* Map placeholder */}
           <div data-reveal className="opacity-0-init">
             {/* [PLACEHOLDER] — replace with real Google Maps embed iframe */}
-            <div className="h-72 bg-grit-grey flex items-center justify-center">
+            <div className="h-72 bg-grit-grey flex items-center justify-center mb-6">
               <span className="font-body text-grit-muted text-sm">[Map Embed Coming Soon]</span>
             </div>
+            {/* [PLACEHOLDER] — replace with real WhatsApp number */}
+            <a
+              href="https://wa.me/[PLACEHOLDER]"
+              className="grit-btn block text-center font-body font-semibold text-sm py-4"
+            >
+              WhatsApp Us to Book
+            </a>
           </div>
         </div>
       </div>

@@ -1,3 +1,5 @@
+import Image from 'next/image'
+
 export default function About() {
   return (
     <section id="about" className="py-24 md:py-32 bg-grit-black">
@@ -20,26 +22,31 @@ export default function About() {
 
             {/* Stats */}
             <div className="grid grid-cols-3 gap-6 border-t border-grit-grey pt-8">
-              {/* [PLACEHOLDER] — replace with real figures */}
+              {/* [PLACEHOLDER] — replace [X]+ with real rider count */}
               <div>
                 <p className="font-display text-grit-sand text-4xl md:text-5xl leading-none">[X]+</p>
                 <p className="font-body text-grit-white text-sm mt-1">Riders</p>
               </div>
               <div>
-                <p className="font-display text-grit-sand text-4xl md:text-5xl leading-none">[X]</p>
-                <p className="font-body text-grit-white text-sm mt-1">Tracks</p>
+                <p className="font-display text-grit-sand text-4xl md:text-5xl leading-none">3</p>
+                <p className="font-body text-grit-white text-sm mt-1">Activities</p>
               </div>
               <div>
-                <p className="font-display text-grit-sand text-4xl md:text-5xl leading-none">[X]+</p>
-                <p className="font-body text-grit-white text-sm mt-1">Events Hosted</p>
+                <p className="font-display text-grit-sand text-4xl md:text-5xl leading-none">Fri&nbsp;&amp;&nbsp;Sat</p>
+                <p className="font-body text-grit-white text-sm mt-1">Every Week</p>
               </div>
             </div>
           </div>
 
-          {/* Image placeholder */}
+          {/* Venue photo */}
           <div data-reveal className="opacity-0-init">
-            <div className="aspect-[4/3] bg-grit-grey flex items-center justify-center">
-              <span className="font-body text-grit-muted text-sm">[Photo Coming Soon]</span>
+            <div className="aspect-[4/3] relative overflow-hidden">
+              <Image
+                src="/images/track-shot-1.jpg"
+                alt="GRIT Quad Biking Arena venue at sunset with GRIT flags"
+                fill
+                className="object-cover object-center"
+              />
             </div>
           </div>
         </div>
