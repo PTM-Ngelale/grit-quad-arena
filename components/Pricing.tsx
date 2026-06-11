@@ -1,3 +1,5 @@
+import { ArrowRight } from 'lucide-react'
+
 const soloRides = [
   { duration: '5 min',  price: '₦6,000',  label: 'Quick Thrill',   featured: false },
   { duration: '10 min', price: '₦10,000', label: 'Perfect Start',  featured: false },
@@ -154,7 +156,7 @@ export default function Pricing() {
                 href="https://wa.me/2348078591455"
                 className="font-body font-semibold text-sm px-6 py-3 bg-grit-orange text-grit-white hover:bg-grit-orange/90 transition-colors inline-block"
               >
-                Request Shuttle →
+                Request Shuttle <ArrowRight size={14} className="inline-block" aria-hidden="true" />
               </a>
             </div>
           </div>

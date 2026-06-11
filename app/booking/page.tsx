@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { Check } from 'lucide-react'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import ScrollRevealProvider from '@/components/ScrollRevealProvider'
@@ -139,7 +140,7 @@ export default function BookingPage() {
                     'Refund policy: [PLACEHOLDER]',
                   ].map((item) => (
                     <li key={item} className="font-body text-grit-white/70 text-sm flex items-start gap-2">
-                      <span className="text-grit-orange mt-0.5 text-xs shrink-0">✓</span>
+                      <Check size={14} className="text-grit-orange mt-0.5 shrink-0" aria-hidden="true" />
                       {item}
                     </li>
                   ))}

@@ -1,3 +1,5 @@
+import { Star } from 'lucide-react'
+
 // TODO: Replace with real testimonials
 
 const testimonials = [
@@ -38,7 +40,7 @@ export default function Testimonials() {
               {/* Stars */}
               <div className="flex gap-1 mb-4" aria-label="5 out of 5 stars">
                 {Array.from({ length: 5 }).map((_, s) => (
-                  <span key={s} className="text-grit-orange text-sm" aria-hidden="true">★</span>
+                  <Star key={s} size={14} className="text-grit-orange fill-grit-orange" aria-hidden="true" />
                 ))}
               </div>
               {/* Quote */}

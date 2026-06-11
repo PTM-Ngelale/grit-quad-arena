@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { Flag, ArrowRight, X } from 'lucide-react'
 
 // June 28, 2026 — 10:00 AM WAT (UTC+1)
 const EVENT_DATE = new Date('2026-06-28T10:00:00+01:00')
@@ -50,8 +51,8 @@ export default function CountdownBanner() {
 
         <Link href="/events" className="flex items-center gap-3 md:gap-5 flex-1 min-w-0 group">
           {/* Label */}
-          <span className="font-body text-grit-black text-[10px] md:text-xs font-bold tracking-widest uppercase whitespace-nowrap shrink-0">
-            🏁 Launch Day — 28 June
+          <span className="font-body text-grit-black text-[10px] md:text-xs font-bold tracking-widest uppercase whitespace-nowrap shrink-0 flex items-center gap-1.5">
+            <Flag size={12} aria-hidden="true" /> Launch Day — 28 June
           </span>
 
           {/* Divider */}
@@ -71,8 +72,8 @@ export default function CountdownBanner() {
             ))}
           </div>
 
-          <span className="hidden md:inline font-body text-grit-black/60 text-[10px] tracking-widest uppercase group-hover:text-grit-black transition-colors ml-auto shrink-0">
-            See event →
+          <span className="hidden md:inline font-body text-grit-black/60 text-[10px] tracking-widest uppercase group-hover:text-grit-black transition-colors ml-auto shrink-0 flex items-center gap-1">
+            See event <ArrowRight size={12} aria-hidden="true" />
           </span>
         </Link>
 
@@ -80,9 +81,9 @@ export default function CountdownBanner() {
         <button
           onClick={() => setDismissed(true)}
           aria-label="Dismiss event banner"
-          className="shrink-0 w-6 h-6 flex items-center justify-center text-grit-black/40 hover:text-grit-black transition-colors text-xl leading-none"
+          className="shrink-0 w-6 h-6 flex items-center justify-center text-grit-black/40 hover:text-grit-black transition-colors"
         >
-          ×
+          <X size={14} aria-hidden="true" />
         </button>
       </div>
     </div>

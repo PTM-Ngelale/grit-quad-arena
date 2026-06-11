@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
+import { ArrowRight } from 'lucide-react'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import ScrollRevealProvider from '@/components/ScrollRevealProvider'
@@ -119,7 +120,7 @@ export default function GalleryPage() {
               rel="noopener noreferrer"
               className="grit-btn font-body font-semibold text-sm px-8 py-4"
             >
-              @grit_quad_arena →
+              @grit_quad_arena <ArrowRight size={14} className="inline-block" aria-hidden="true" />
             </a>
           </div>
         </div>

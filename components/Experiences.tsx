@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import { ArrowRight } from 'lucide-react'
 
 const activities = [
   {
@@ -79,7 +80,7 @@ export default function Experiences() {
                   href={act.ctaHref}
                   className="font-body text-grit-sand text-xs tracking-widest uppercase hover:text-grit-orange transition-colors border-b border-grit-sand/40 hover:border-grit-orange pb-0.5"
                 >
-                  {act.cta} →
+                  {act.cta} <ArrowRight size={12} className="inline-block" aria-hidden="true" />
                 </a>
               </div>
             </div>

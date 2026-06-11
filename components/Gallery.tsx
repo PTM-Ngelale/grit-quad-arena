@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import { ArrowRight } from 'lucide-react'
 
 const galleryItems = [
   { src: '/images/biking-in-motion.jpg',      alt: 'Two riders kicking up dust at GRIT Arena',          category: 'Action'  },
@@ -51,7 +52,7 @@ export default function Gallery() {
             href="/gallery"
             className="font-body text-grit-white text-sm hover:text-grit-orange transition-colors border-b border-grit-white/30 hover:border-grit-orange pb-0.5 mr-8"
           >
-            View Full Gallery →
+            View Full Gallery <ArrowRight size={14} className="inline-block" aria-hidden="true" />
           </a>
           <a
             href="https://www.instagram.com/grit_quad_arena"
@@ -59,7 +60,7 @@ export default function Gallery() {
             rel="noopener noreferrer"
             className="font-body text-grit-white text-sm hover:text-grit-orange transition-colors border-b border-grit-white/30 hover:border-grit-orange pb-0.5"
           >
-            Follow on Instagram →
+            Follow on Instagram <ArrowRight size={14} className="inline-block" aria-hidden="true" />
           </a>
         </div>
       </div>

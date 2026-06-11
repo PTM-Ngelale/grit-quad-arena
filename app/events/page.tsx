@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
+import { Check, ArrowRight, Cake, Building2, Flag, Users } from 'lucide-react'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import ScrollRevealProvider from '@/components/ScrollRevealProvider'
@@ -28,28 +29,28 @@ const upcomingEvents = [
 
 const eventTypes = [
   {
-    icon: '🎂',
+    icon: <Cake size={40} className="text-grit-orange" aria-hidden="true" />,
     title: 'Birthday Parties',
     description:
       "Make it a birthday they'll never forget. Private track access, safety gear, and a dedicated host for your crew. Packages for any group size.",
     cta: 'Plan a Birthday',
   },
   {
-    icon: '🏢',
+    icon: <Building2 size={40} className="text-grit-orange" aria-hidden="true" />,
     title: 'Corporate Outings',
     description:
       'Ditch the boardroom. GRIT offers team bonding experiences that actually work — rugged, competitive, and unforgettable. Catering and logistics on request.',
     cta: 'Enquire for Corporates',
   },
   {
-    icon: '🏁',
+    icon: <Flag size={40} className="text-grit-orange" aria-hidden="true" />,
     title: 'Private Track Days',
     description:
       'Book the entire arena for your group. Full track access, custom duration, and a dedicated safety crew. Ideal for car clubs, schools, and large gatherings.',
     cta: 'Book a Private Day',
   },
   {
-    icon: '👨‍👩‍👧',
+    icon: <Users size={40} className="text-grit-orange" aria-hidden="true" />,
     title: 'Family Sessions',
     description:
       'Supervised family rides for all ages. Our team ensures a safe, fun experience for first-timers and younger riders. Age restrictions apply.',
@@ -100,7 +101,7 @@ export default function EventsPage() {
               rel="noopener noreferrer"
               className="font-body text-grit-muted text-xs tracking-widest uppercase hover:text-grit-orange transition-colors whitespace-nowrap"
             >
-              Follow for updates →
+              Follow for updates <ArrowRight size={12} className="inline-block" aria-hidden="true" />
             </a>
           </div>
 
@@ -124,7 +125,7 @@ export default function EventsPage() {
                     <ul className="space-y-2 mb-6">
                       {event.highlights.map((h) => (
                         <li key={h} className="font-body text-grit-white/70 text-sm flex items-start gap-2">
-                          <span className="text-grit-orange shrink-0 mt-0.5">✓</span>
+                          <Check size={14} className="text-grit-orange shrink-0 mt-0.5" aria-hidden="true" />
                           {h}
                         </li>
                       ))}
@@ -172,14 +173,14 @@ export default function EventsPage() {
                 data-reveal
                 className="opacity-0-init bg-grit-grey p-10 hover:scale-[1.02] transition-transform duration-300"
               >
-                <span className="text-4xl block mb-6" aria-hidden="true">{event.icon}</span>
+                <div className="mb-6">{event.icon}</div>
                 <h3 className="font-display text-grit-white text-3xl leading-none mb-4">{event.title}</h3>
                 <p className="font-body text-grit-white/60 text-sm leading-relaxed mb-8">{event.description}</p>
                 <a
                   href="/booking"
                   className="font-body text-grit-sand text-xs tracking-widest uppercase hover:text-grit-orange transition-colors border-b border-grit-sand/40 hover:border-grit-orange pb-0.5"
                 >
-                  {event.cta} →
+                  {event.cta} <ArrowRight size={12} className="inline-block" aria-hidden="true" />
                 </a>
               </div>
             ))}
