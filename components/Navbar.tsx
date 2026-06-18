@@ -16,7 +16,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-black/60 backdrop-blur-md">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-black">
       {/* Countdown ribbon — renders only before event date */}
       <CountdownBanner />
 
@@ -32,7 +32,7 @@ export default function Navbar() {
             className="object-contain"
             priority
           />
-          <span className="hidden sm:block font-display text-grit-white text-lg leading-none tracking-wide">
+          <span className="font-display text-grit-white text-lg leading-none tracking-wide">
             GRIT QUAD ARENA
           </span>
         </a>

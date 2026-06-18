@@ -1,5 +1,60 @@
 import { ArrowRight } from 'lucide-react'
 
+/* ── Archery ─────────────────────────────────────────────── */
+
+const archeryIndividual = [
+  { label: '3 Rounds', detail: '9 Arrows',  price: '₦4,000' },
+  { label: '4 Rounds', detail: '12 Arrows', price: '₦5,000' },
+  { label: '5 Rounds', detail: '15 Arrows', price: '₦6,500' },
+]
+
+const archeryCompetition = [
+  {
+    label: 'Duel Mode',
+    detail: '2 Players · 3 rounds each (9 arrows) · Winner Takes All',
+    price: '₦7,000',
+    note: 'Total',
+  },
+  {
+    label: 'Group Challenge',
+    detail: '3–6 Players · 4 rounds each (12 arrows)',
+    price: '₦5,000',
+    note: 'Per Person',
+  },
+]
+
+/* ── Gel Blaster ─────────────────────────────────────────── */
+
+const gelIndividual = [
+  {
+    label: 'Battle Mode',
+    detail: '1 Magazine (60 shots) · Fast-paced timed match · Training included',
+    price: '₦5,000',
+  },
+  {
+    label: 'Extended Battle',
+    detail: '2 Magazines (120 shots) · Extended tactical gameplay · Team objectives included',
+    price: '₦8,500',
+  },
+]
+
+const gelTeam = [
+  {
+    label: 'Half Bottle Match',
+    detail: '1 mag each · Half bottle reload · Tactical team battle',
+    price: '₦6,500',
+    note: 'Per Person',
+  },
+  {
+    label: 'Full Bottle Match',
+    detail: '1 mag each · Full bottle reload · Tactical team battle',
+    price: '₦8,500',
+    note: 'Per Person',
+  },
+]
+
+/* ── Quad biking ─────────────────────────────────────────── */
+
 const soloRides = [
   { duration: '5 min',  price: '₦6,000',  label: 'Quick Thrill',   featured: false },
   { duration: '10 min', price: '₦10,000', label: 'Perfect Start',  featured: false },
@@ -51,7 +106,7 @@ export default function Pricing() {
         <div className="text-center mb-16">
           <p className="font-body text-grit-sand text-xs tracking-widest uppercase mb-4">Pricing</p>
           <h2 className="font-display text-grit-white text-5xl md:text-7xl leading-none">
-            Ride Options
+            All Experiences
           </h2>
         </div>
 
@@ -131,15 +186,85 @@ export default function Pricing() {
           </p>
         </div>
 
-        {/* Shuttle service */}
-        <div data-reveal className="opacity-0-init border border-grit-orange/30 bg-grit-grey p-8 mb-8">
+        {/* ── ARCHERY ARENA ─────────────────────────────────────── */}
+        <div className="mt-24">
+          <div className="mb-10">
+            <p className="font-body text-grit-sand text-xs tracking-widest uppercase mb-2">Arena</p>
+            <h3 className="font-display text-grit-white text-4xl md:text-5xl leading-none">Archery</h3>
+          </div>
+
+          {/* Individual Play */}
+          <p className="font-body text-grit-muted text-xs tracking-widest uppercase mb-4">Individual Play</p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
+            {archeryIndividual.map((pkg) => (
+              <div key={pkg.label} data-reveal className="opacity-0-init p-6 bg-grit-grey border border-grit-grey">
+                <p className="font-display text-grit-orange text-4xl leading-none mb-1">{pkg.label}</p>
+                <p className="font-body text-grit-muted text-xs mb-3">{pkg.detail}</p>
+                <p className="font-display text-grit-white text-2xl">{pkg.price}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Competition Mode */}
+          <p className="font-body text-grit-muted text-xs tracking-widest uppercase mb-4">Competition Mode</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {archeryCompetition.map((pkg) => (
+              <div key={pkg.label} data-reveal className="opacity-0-init p-6 bg-grit-grey border border-grit-grey">
+                <p className="font-display text-grit-orange text-3xl leading-none mb-1">{pkg.label}</p>
+                <p className="font-body text-grit-muted text-xs mb-3">{pkg.detail}</p>
+                <p className="font-display text-grit-white text-2xl">
+                  {pkg.price}{' '}
+                  <span className="font-body text-grit-muted text-xs">{pkg.note}</span>
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ── GEL BLASTER ARENA ──────────────────────────────────── */}
+        <div className="mt-24">
+          <div className="mb-10">
+            <p className="font-body text-grit-sand text-xs tracking-widest uppercase mb-2">Arena</p>
+            <h3 className="font-display text-grit-white text-4xl md:text-5xl leading-none">Gel Blasters</h3>
+          </div>
+
+          {/* Individual Battles */}
+          <p className="font-body text-grit-muted text-xs tracking-widest uppercase mb-4">Individual Battles</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10">
+            {gelIndividual.map((pkg) => (
+              <div key={pkg.label} data-reveal className="opacity-0-init p-6 bg-grit-grey border border-grit-grey">
+                <p className="font-display text-grit-orange text-3xl leading-none mb-1">{pkg.label}</p>
+                <p className="font-body text-grit-muted text-xs mb-3">{pkg.detail}</p>
+                <p className="font-display text-grit-white text-2xl">{pkg.price}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Team Packages */}
+          <p className="font-body text-grit-muted text-xs tracking-widest uppercase mb-4">Team Packages</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {gelTeam.map((pkg) => (
+              <div key={pkg.label} data-reveal className="opacity-0-init p-6 bg-grit-grey border border-grit-grey">
+                <p className="font-display text-grit-orange text-3xl leading-none mb-1">{pkg.label}</p>
+                <p className="font-body text-grit-muted text-xs mb-3">{pkg.detail}</p>
+                <p className="font-display text-grit-white text-2xl">
+                  {pkg.price}{' '}
+                  <span className="font-body text-grit-muted text-xs">{pkg.note}</span>
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ── SHUTTLE SERVICE — all arenas ───────────────────────── */}
+        <div data-reveal className="opacity-0-init border border-grit-orange/30 bg-grit-grey p-8 mt-24">
           <div className="flex flex-col md:flex-row md:items-start gap-8">
             <div className="flex-1">
               <p className="font-body text-grit-orange text-xs tracking-widest uppercase mb-2">Shuttle Service</p>
               <h3 className="font-display text-grit-white text-3xl leading-none mb-3">We&apos;ll Pick You Up</h3>
               <p className="font-body text-grit-white/60 text-sm leading-relaxed mb-4">
-                Available for groups of <strong className="text-grit-white">4 or more riders</strong> with{' '}
-                <strong className="text-grit-white">24 hours notice</strong>. A 30% deposit is required to confirm shuttle booking.
+                Available for groups of <strong className="text-grit-white">4 or more</strong> booking any activity — quad biking, archery, or gel blasters. Requires{' '}
+                <strong className="text-grit-white">24 hours notice</strong> and a 30% deposit to confirm.
               </p>
               <div className="space-y-2">
                 {shuttlePickups.map((stop) => (
@@ -161,7 +286,7 @@ export default function Pricing() {
           </div>
         </div>
 
-        <p className="font-body text-grit-muted text-sm text-center">
+        <p className="font-body text-grit-muted text-sm text-center mt-16">
           Prices subject to change. Contact us for corporate and event rates.
         </p>
       </div>

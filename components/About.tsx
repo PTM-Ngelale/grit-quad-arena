@@ -23,7 +23,7 @@ export default function About() {
             {/* Stats */}
             <div className="grid grid-cols-3 gap-6 border-t border-grit-grey pt-8">
               <div>
-                <p className="font-display text-grit-sand text-4xl md:text-5xl leading-none">100+</p>
+                <p className="font-display text-grit-sand text-4xl md:text-5xl leading-none">400+</p>
                 <p className="font-body text-grit-white text-sm mt-1">Riders</p>
               </div>
               <div>

@@ -17,17 +17,17 @@ const activities = [
     description: 'Test your focus and precision at our archery range. Under guidance from our team, you\'ll draw, aim, and release. No experience needed — just steady hands.',
     image: '/images/archery.jpg',
     imageAlt: 'Archery at GRIT Arena — GRIT Off-Road Adventure uniform',
-    cta: 'Contact for Pricing',
-    ctaHref: '#contact',
+    cta: 'See Pricing',
+    ctaHref: '#pricing',
   },
   {
     tag: 'JELL BLASTERS',
     title: 'Battle It Out',
     description: 'Squad up and take cover. Jell Blasters is a high-energy team battle game that brings the arena to life. Perfect for groups, birthdays, and corporate outings.',
-    image: '/videos/jell-blasters.jpg',
+    image: '/images/jell-blast-1.jpg',
     imageAlt: 'Jell Blasters battle at GRIT Arena',
-    cta: 'Contact for Pricing',
-    ctaHref: '#contact',
+    cta: 'See Pricing',
+    ctaHref: '#pricing',
   },
 ]
 

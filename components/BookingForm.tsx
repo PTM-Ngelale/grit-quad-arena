@@ -42,6 +42,17 @@ export default function BookingForm() {
   const [errorMsg, setErrorMsg]     = useState('')
   const [wantsShuttle, setWantsShuttle] = useState(false)
   const [submittedName, setSubmittedName] = useState('')
+  const [dateError, setDateError]   = useState('')
+
+  function isFriOrSat(value: string) {
+    if (!value) return true
+    const day = new Date(value + 'T00:00:00').getDay() // local midnight avoids UTC offset shift
+    return day === 5 || day === 6
+  }
+
+  function handleDateChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setDateError(isFriOrSat(e.target.value) ? '' : 'We only operate on Fridays and Saturdays. Please pick one of those days.')
+  }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -54,6 +65,12 @@ export default function BookingForm() {
     // Basic client-side guard
     if (!data.name?.trim() || !data.phone?.trim() || !data.duration || !data.date || !data.riders) {
       setErrorMsg('Please fill in all required fields.')
+      setStatus('error')
+      return
+    }
+
+    if (!isFriOrSat(data.date)) {
+      setErrorMsg('We only operate on Fridays and Saturdays. Please pick one of those days.')
       setStatus('error')
       return
     }
@@ -160,9 +177,13 @@ export default function BookingForm() {
           name="date"
           required
           disabled={isSubmitting}
-          className="w-full bg-grit-grey border border-grit-grey/80 text-grit-white font-body text-sm px-4 py-3 outline-none focus:border-grit-orange transition-colors disabled:opacity-50"
+          onChange={handleDateChange}
+          className={`w-full bg-grit-grey border text-grit-white font-body text-sm px-4 py-3 outline-none focus:border-grit-orange transition-colors disabled:opacity-50 ${dateError ? 'border-red-400' : 'border-grit-grey/80'}`}
         />
-        <p className="font-body text-grit-muted text-xs mt-1">Fridays, Saturdays &amp; Sundays only</p>
+        {dateError
+          ? <p className="font-body text-red-400 text-xs mt-1">{dateError}</p>
+          : <p className="font-body text-grit-muted text-xs mt-1">Fridays and Saturdays only</p>
+        }
       </div>
 
       {/* Riders */}
@@ -195,7 +216,7 @@ export default function BookingForm() {
           />
           <span className="font-body text-grit-white/70 text-sm leading-relaxed">
             I need shuttle pickup{' '}
-            <span className="text-grit-muted">(groups of 4+ · 24hrs notice · 30% deposit)</span>
+            <span className="text-grit-muted">(groups of 4+ · any activity · 24hrs notice · 30% deposit)</span>
           </span>
         </label>
 

@@ -165,24 +165,33 @@ export async function POST(req: NextRequest) {
 
     const resend = new Resend(process.env.RESEND_API_KEY)
 
-    // Notify the business
-    await resend.emails.send({
-      from: 'GRIT Arena Bookings <onboarding@resend.dev>',
-      to: ['gritarena@outlook.com'],
-      replyTo: body.email || undefined,
-      subject: `New Booking — ${body.name} · ${DURATION_LABELS[body.duration] ?? body.duration}`,
-      html: buildNotificationEmail(body),
-    })
+    const sends: Promise<unknown>[] = []
 
-    // Confirm to customer if they gave an email
+    // Notify the business
+    sends.push(
+      resend.emails.send({
+        from: 'GRIT Arena Bookings <onboarding@resend.dev>',
+        to: ['gritarena@outlook.com'],
+        replyTo: body.email || undefined,
+        subject: `New Booking — ${body.name} · ${DURATION_LABELS[body.duration] ?? body.duration}`,
+        html: buildNotificationEmail(body),
+      }).catch((err) => console.error('[booking notify error]', err))
+    )
+
+    // Confirm to customer if they gave an email; CC the business on every confirmation
     if (body.email) {
-      await resend.emails.send({
-        from: 'GRIT Arena <onboarding@resend.dev>',
-        to: [body.email],
-        subject: 'Booking request received — GRIT Quad Biking Arena',
-        html: buildConfirmationEmail(body),
-      })
+      sends.push(
+        resend.emails.send({
+          from: 'GRIT Arena <onboarding@resend.dev>',
+          to: [body.email],
+          cc: ['gritarena@outlook.com'],
+          subject: 'Booking request received — GRIT Quad Biking Arena',
+          html: buildConfirmationEmail(body),
+        }).catch((err) => console.error('[booking confirm error]', err))
+      )
     }
+
+    await Promise.all(sends)
 
     return NextResponse.json({ success: true })
   } catch (err) {

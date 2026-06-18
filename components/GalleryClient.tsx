@@ -15,6 +15,8 @@ const imageItems = [
   { src: '/images/grit-flag.jpg',            alt: 'GRIT Quad Biking Arena flag against a red sky',      category: 'venue'      },
   { src: '/images/customer-group-photo.png', alt: 'Group of riders posing at GRIT Quad Biking Arena',  category: 'groups'     },
   { src: '/images/archery.jpg',              alt: 'Archery activity at GRIT Arena',                     category: 'activities' },
+  { src: '/images/jell-blast-1.jpg',        alt: 'Gel Blasters battle at GRIT Arena',                   category: 'activities' },
+  { src: '/images/jell-blast-2.jpg',        alt: 'Gel Blasters action at GRIT Arena',                   category: 'activities' },
 ]
 
 const videoItems = [
