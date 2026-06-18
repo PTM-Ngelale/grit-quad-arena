@@ -23,7 +23,7 @@ export default function BookingCTA() {
             Call Us
           </a>
           <a
-            href="https://wa.me/2348078591455"
+            href="https://wa.me/447443023079"
             target="_blank"
             rel="noopener noreferrer"
             className="font-body font-semibold px-8 py-4 text-base bg-grit-white text-grit-black hover:bg-grit-white/80 transition-colors"
@@ -33,7 +33,7 @@ export default function BookingCTA() {
         </div>
 
         <p className="font-body text-grit-black/60 text-sm">
-          Open Fridays, Saturdays &amp; Sundays · 10am – 6pm
+          Open Fridays &amp; Saturdays · 10am – 6pm
         </p>
       </div>
     </section>

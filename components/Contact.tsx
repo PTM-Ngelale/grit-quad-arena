@@ -14,9 +14,8 @@ export default function Contact() {
           <div data-reveal className="opacity-0-init space-y-8">
             <div>
               <p className="font-body text-grit-sand text-xs tracking-widest uppercase mb-2">Address</p>
-              {/* [PLACEHOLDER] — replace with real address */}
               <p className="font-body text-grit-white text-sm leading-relaxed">
-                [PLACEHOLDER ADDRESS], Port Harcourt, Rivers State
+                Eleme, Port Harcourt, Rivers State
               </p>
             </div>
 
@@ -100,7 +99,7 @@ export default function Contact() {
           <div data-reveal className="opacity-0-init">
             <div className="h-72 overflow-hidden mb-6">
               <iframe
-                src="https://maps.google.com/maps?q=GRIT+Quad+Biking+Arena+Port+Harcourt&output=embed"
+                src="https://maps.google.com/maps?q=4.7723498,7.1341131&z=16&output=embed"
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
@@ -111,7 +110,7 @@ export default function Contact() {
               />
             </div>
             <a
-              href="https://wa.me/2348078591455"
+              href="https://wa.me/447443023079"
               target="_blank"
               rel="noopener noreferrer"
               className="grit-btn block text-center font-body font-semibold text-sm py-4"

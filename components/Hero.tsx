@@ -1,16 +1,16 @@
-import Image from 'next/image'
-
 export default function Hero() {
   return (
     <section className="relative min-h-screen flex flex-col bg-grit-black overflow-hidden">
-      {/* Real background photo */}
+      {/* Background video */}
       <div className="absolute inset-0">
-        <Image
-          src="/images/biking-in-motion.jpg"
-          alt="Riders kicking up dust at GRIT Quad Biking Arena"
-          fill
-          className="object-cover object-center"
-          priority
+        <video
+          src="/videos/ride-drift.MOV"
+          autoPlay
+          muted
+          loop
+          playsInline
+          poster="/images/biking-in-motion.jpg"
+          className="absolute inset-0 w-full h-full object-cover object-center"
         />
         <div className="absolute inset-0 bg-grit-black/65" />
       </div>
@@ -61,9 +61,9 @@ export default function Hero() {
       <div className="relative z-10 border-t border-white/10 py-3">
         <p className="font-body text-grit-muted text-xs text-center tracking-wide">
           Open:{' '}
-          <span className="text-grit-white/80">Fri, Sat &amp; Sun · 10am – 6pm</span>
+          <span className="text-grit-white/80">Fri &amp; Sat · 10am – 6pm</span>
           {' · '}
-          <span className="text-grit-white/80">[PLACEHOLDER ADDRESS]</span>, Port Harcourt, Rivers State
+          <span className="text-grit-white/80">Eleme</span>, Port Harcourt, Rivers State
         </p>
       </div>
     </section>

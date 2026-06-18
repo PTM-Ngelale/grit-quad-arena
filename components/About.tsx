@@ -22,9 +22,8 @@ export default function About() {
 
             {/* Stats */}
             <div className="grid grid-cols-3 gap-6 border-t border-grit-grey pt-8">
-              {/* [PLACEHOLDER] — replace [X]+ with real rider count */}
               <div>
-                <p className="font-display text-grit-sand text-4xl md:text-5xl leading-none">[X]+</p>
+                <p className="font-display text-grit-sand text-4xl md:text-5xl leading-none">100+</p>
                 <p className="font-body text-grit-white text-sm mt-1">Riders</p>
               </div>
               <div>

@@ -26,7 +26,7 @@ function SuccessCard({ name }: { name: string }) {
         Your booking request has been sent. We&apos;ll confirm your slot via WhatsApp or phone within 24 hours.
       </p>
       <a
-        href="https://wa.me/2348078591455"
+        href="https://wa.me/447443023079"
         target="_blank"
         rel="noopener noreferrer"
         className="grit-btn font-body font-semibold text-sm px-8 py-4 inline-block"

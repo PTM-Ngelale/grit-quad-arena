@@ -94,7 +94,7 @@ export default function BookingPage() {
                     0704 082 0199
                   </a>
                   <a
-                    href="https://wa.me/2348078591455"
+                    href="https://wa.me/447443023079"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="font-body font-semibold px-6 py-3 text-sm border border-grit-white/30 text-grit-white hover:border-grit-orange hover:text-grit-orange transition-colors text-center"
@@ -136,8 +136,7 @@ export default function BookingPage() {
                     'Helmets and safety gear provided',
                     'Walk-ins welcome — subject to availability',
                     'Group bookings recommended 24hrs in advance',
-                    'Minimum rider age: [PLACEHOLDER]',
-                    'Refund policy: [PLACEHOLDER]',
+                    'Maximum 6 riders per slot',
                   ].map((item) => (
                     <li key={item} className="font-body text-grit-white/70 text-sm flex items-start gap-2">
                       <Check size={14} className="text-grit-orange mt-0.5 shrink-0" aria-hidden="true" />

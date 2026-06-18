@@ -151,9 +151,8 @@ export default function Pricing() {
               </div>
             </div>
             <div className="shrink-0">
-              {/* [PLACEHOLDER] — replace with real WhatsApp number */}
               <a
-                href="https://wa.me/2348078591455"
+                href="https://wa.me/447443023079"
                 className="font-body font-semibold text-sm px-6 py-3 bg-grit-orange text-grit-white hover:bg-grit-orange/90 transition-colors inline-block"
               >
                 Request Shuttle <ArrowRight size={14} className="inline-block" aria-hidden="true" />

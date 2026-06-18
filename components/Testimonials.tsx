@@ -5,17 +5,17 @@ import { Star } from 'lucide-react'
 const testimonials = [
   {
     quote: "Best experience in PH! Rode for the first time and I was hooked. Can't wait to come back.",
-    name: '[Name]',
+    name: 'Collins',
     label: 'Port Harcourt',
   },
   {
     quote: 'Took my team here for a bonding day. GRIT delivered — everyone had an absolute blast.',
-    name: '[Name]',
+    name: 'Tamara',
     label: 'Corporate Client',
   },
   {
     quote: 'My kids loved it. Staff were super helpful and safety-conscious. Highly recommend.',
-    name: '[Name]',
+    name: 'Charles',
     label: 'Parent',
   },
 ]

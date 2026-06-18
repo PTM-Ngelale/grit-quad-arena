@@ -17,7 +17,7 @@ const steps = [
   {
     number: '04',
     title: 'Make Memories',
-    description: 'Our team captures the highlights — [PLACEHOLDER: photos/video service TBC]',
+    description: 'Our team captures your ride — photos and video of your session are available on the day.',
   },
 ]
 

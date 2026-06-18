@@ -126,7 +126,7 @@ function buildConfirmationEmail(data: Record<string, string>): string {
         <tr>
           <td style="padding:0 40px 40px;text-align:center;">
             <p style="margin:0 0 20px;font-size:13px;color:#6B6B6B;">Questions? Reach us on WhatsApp:</p>
-            <a href="https://wa.me/2348078591455"
+            <a href="https://wa.me/447443023079"
                style="display:inline-block;background:#CC1111;color:#fff;text-decoration:none;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:12px 24px;">
               Chat on WhatsApp
             </a>

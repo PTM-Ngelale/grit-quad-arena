@@ -142,7 +142,7 @@ export default function EventsPage() {
                     <div className="flex flex-col gap-3">
                       <p className="font-body text-grit-sand text-xs">{event.spots}</p>
                       <a
-                        href="https://wa.me/2348078591455"
+                        href="https://wa.me/447443023079"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="grit-btn font-body font-semibold text-sm px-6 py-3 text-center"
@@ -203,7 +203,7 @@ export default function EventsPage() {
               Start Planning
             </a>
             <a
-              href="https://wa.me/2348078591455"
+              href="https://wa.me/447443023079"
               target="_blank"
               rel="noopener noreferrer"
               className="font-body font-semibold px-8 py-4 text-base bg-grit-white text-grit-black hover:bg-grit-white/80 transition-colors"
@@ -242,8 +242,7 @@ export default function EventsPage() {
               },
               {
                 q: 'What happens if it rains?',
-                // [PLACEHOLDER] — confirm weather/cancellation policy
-                a: '[PLACEHOLDER: insert actual weather/cancellation policy].',
+                a: 'We ride rain or shine — it\'s all part of the GRIT experience. Rain coats are provided on-site so you stay in the action regardless of the weather.',
               },
             ].map((faq) => (
               <div key={faq.q} data-reveal className="opacity-0-init border-t border-grit-grey py-8">
