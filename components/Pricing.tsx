@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 
 /* ── Archery ─────────────────────────────────────────────── */
@@ -56,10 +57,10 @@ const gelTeam = [
 /* ── Quad biking ─────────────────────────────────────────── */
 
 const soloRides = [
-  { duration: '5 min',  price: '₦6,000',  label: 'Quick Thrill',   featured: false },
-  { duration: '10 min', price: '₦10,000', label: 'Perfect Start',  featured: false },
-  { duration: '15 min', price: '₦13,000', label: 'Most Popular',   featured: true  },
-  { duration: '30 min', price: '₦25,000', label: 'Premium Ride',   featured: false },
+  { id: '5min',  duration: '5 min',  price: '₦6,000',  label: 'Quick Thrill',   featured: false },
+  { id: '10min', duration: '10 min', price: '₦10,000', label: 'Perfect Start',  featured: false },
+  { id: '15min', duration: '15 min', price: '₦13,000', label: 'Most Popular',   featured: true  },
+  { id: '30min', duration: '30 min', price: '₦25,000', label: 'Premium Ride',   featured: false },
 ]
 
 const groupRates = [
@@ -115,10 +116,11 @@ export default function Pricing() {
           <p className="font-body text-grit-sand text-xs tracking-widest uppercase mb-6">Solo Rides</p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {soloRides.map((ride) => (
-              <div
+              <Link
                 key={ride.duration}
+                href={`/booking?duration=${ride.id}#your-details`}
                 data-reveal
-                className={`opacity-0-init relative p-6 bg-grit-grey ${
+                className={`opacity-0-init relative p-6 bg-grit-grey block transition-colors hover:border-grit-orange ${
                   ride.featured ? 'border-2 border-grit-orange' : 'border border-grit-grey'
                 }`}
               >
@@ -134,7 +136,7 @@ export default function Pricing() {
                   {ride.price}
                 </p>
                 <p className="font-body text-grit-muted text-xs">{ride.label}</p>
-              </div>
+              </Link>
             ))}
           </div>
         </div>

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { Suspense } from 'react'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import ScrollRevealProvider from '@/components/ScrollRevealProvider'
@@ -25,7 +26,9 @@ export default function BookingPage() {
         </div>
       </section>
 
-      <BookingPageContent />
+      <Suspense>
+        <BookingPageContent />
+      </Suspense>
 
       <Footer />
     </main>

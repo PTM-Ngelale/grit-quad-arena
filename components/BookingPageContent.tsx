@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { Check } from 'lucide-react'
 import BookingForm from './BookingForm'
 
@@ -11,7 +12,8 @@ const soloRides = [
 ]
 
 export default function BookingPageContent() {
-  const [selectedDuration, setSelectedDuration] = useState('')
+  const searchParams = useSearchParams()
+  const [selectedDuration, setSelectedDuration] = useState(searchParams.get('duration') ?? '')
 
   function pickDuration(id: string) {
     setSelectedDuration(id)
