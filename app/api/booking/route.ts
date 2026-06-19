@@ -171,7 +171,7 @@ export async function POST(req: NextRequest) {
     sends.push(
       resend.emails.send({
         from: 'GRIT Arena Bookings <onboarding@resend.dev>',
-        to: ['gritarena@outlook.com'],
+        to: ['preciousngelale@gmail.com'],
         replyTo: body.email || undefined,
         subject: `New Booking — ${body.name} · ${DURATION_LABELS[body.duration] ?? body.duration}`,
         html: buildNotificationEmail(body),
@@ -184,7 +184,7 @@ export async function POST(req: NextRequest) {
         resend.emails.send({
           from: 'GRIT Arena <onboarding@resend.dev>',
           to: [body.email],
-          cc: ['gritarena@outlook.com'],
+          cc: ['preciousngelale@gmail.com'],
           subject: 'Booking request received — GRIT Quad Biking Arena',
           html: buildConfirmationEmail(body),
         }).catch((err) => console.error('[booking confirm error]', err))
