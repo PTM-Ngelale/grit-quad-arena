@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 const upcomingEvents = [
   {
     title: "GRIT Arena Launch Day",
-    date: 'Saturday, 28 June 2026',
+    date: 'Sunday, 19 July 2026',
     type: 'OPEN EVENT',
     description:
       "Our first major event — and the launch of our very first Sunday opening. Expect timed lap competitions, a live leaderboard, group challenges, music, and the full GRIT experience. Open to all — come race, compete, and be part of history.",
@@ -135,9 +135,9 @@ export default function EventsPage() {
                   {/* Right: date + CTA */}
                   <div className="shrink-0 md:text-right flex flex-col justify-between gap-6">
                     <div>
-                      <p className="font-display text-grit-orange text-3xl md:text-4xl leading-none">28 June</p>
+                      <p className="font-display text-grit-orange text-3xl md:text-4xl leading-none">19 July</p>
                       <p className="font-display text-grit-white text-xl leading-none mt-1">2026</p>
-                      <p className="font-body text-grit-muted text-xs mt-2">Saturday · First Sunday Opening</p>
+                      <p className="font-body text-grit-muted text-xs mt-2">Sunday · Launch Day</p>
                     </div>
                     <div className="flex flex-col gap-3">
                       <p className="font-body text-grit-sand text-xs">{event.spots}</p>
@@ -234,7 +234,7 @@ export default function EventsPage() {
               },
               {
                 q: 'What days are you open?',
-                a: 'Fridays, Saturdays, and Sundays — 10:00am to 6:00pm. Sunday opening launched 28 June 2026.',
+                a: 'Fridays, Saturdays, and Sundays — 10:00am to 6:00pm. Sunday opening launched 19 July 2026.',
               },
               {
                 q: 'Do you cater for corporate events?',

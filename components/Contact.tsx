@@ -73,7 +73,7 @@ export default function Contact() {
               <p className="font-body text-grit-sand text-xs tracking-widest uppercase mb-2">Opening Hours</p>
               <p className="font-body text-grit-white text-sm">Fridays, Saturdays &amp; Sundays</p>
               <p className="font-body text-grit-muted text-sm">10:00am – 6:00pm</p>
-              <p className="font-body text-grit-orange text-xs mt-1">Sunday opening launched 28 June 2026</p>
+              <p className="font-body text-grit-orange text-xs mt-1">Sunday opening launched 19 July 2026</p>
             </div>
 
             {/* Shuttle service */}

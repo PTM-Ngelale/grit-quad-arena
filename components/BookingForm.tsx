@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 const soloRides = [
   { id: '5min',  label: '5 Minutes',  price: '₦6,000'  },
@@ -14,6 +14,11 @@ const shuttleOptions = [
 ]
 
 type Status = 'idle' | 'submitting' | 'success' | 'error'
+
+interface Props {
+  selectedDuration?: string
+  onDurationChange?: (id: string) => void
+}
 
 function SuccessCard({ name }: { name: string }) {
   return (
@@ -37,21 +42,26 @@ function SuccessCard({ name }: { name: string }) {
   )
 }
 
-export default function BookingForm() {
+export default function BookingForm({ selectedDuration, onDurationChange }: Props) {
   const [status, setStatus]         = useState<Status>('idle')
   const [errorMsg, setErrorMsg]     = useState('')
   const [wantsShuttle, setWantsShuttle] = useState(false)
   const [submittedName, setSubmittedName] = useState('')
   const [dateError, setDateError]   = useState('')
+  const [duration, setDuration]     = useState(selectedDuration ?? '')
 
-  function isFriOrSat(value: string) {
+  useEffect(() => {
+    if (selectedDuration) setDuration(selectedDuration)
+  }, [selectedDuration])
+
+  function isOperatingDay(value: string) {
     if (!value) return true
     const day = new Date(value + 'T00:00:00').getDay() // local midnight avoids UTC offset shift
-    return day === 5 || day === 6
+    return day === 5 || day === 6 || day === 0
   }
 
   function handleDateChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setDateError(isFriOrSat(e.target.value) ? '' : 'We only operate on Fridays and Saturdays. Please pick one of those days.')
+    setDateError(isOperatingDay(e.target.value) ? '' : 'We operate on Fridays, Saturdays, and Sundays. Please pick one of those days.')
   }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -69,8 +79,8 @@ export default function BookingForm() {
       return
     }
 
-    if (!isFriOrSat(data.date)) {
-      setErrorMsg('We only operate on Fridays and Saturdays. Please pick one of those days.')
+    if (!isOperatingDay(data.date)) {
+      setErrorMsg('We operate on Fridays, Saturdays, and Sundays. Please pick one of those days.')
       setStatus('error')
       return
     }
@@ -154,7 +164,11 @@ export default function BookingForm() {
           name="duration"
           required
           disabled={isSubmitting}
-          defaultValue=""
+          value={duration}
+          onChange={(e) => {
+            setDuration(e.target.value)
+            onDurationChange?.(e.target.value)
+          }}
           className="w-full bg-grit-grey border border-grit-grey/80 text-grit-white font-body text-sm px-4 py-3 outline-none focus:border-grit-orange transition-colors disabled:opacity-50"
         >
           <option value="" disabled>Select a duration</option>
@@ -182,7 +196,7 @@ export default function BookingForm() {
         />
         {dateError
           ? <p className="font-body text-red-400 text-xs mt-1">{dateError}</p>
-          : <p className="font-body text-grit-muted text-xs mt-1">Fridays and Saturdays only</p>
+          : <p className="font-body text-grit-muted text-xs mt-1">Fridays, Saturdays and Sundays only</p>
         }
       </div>
 

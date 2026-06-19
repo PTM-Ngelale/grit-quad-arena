@@ -3,8 +3,8 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Flag, ArrowRight, X } from 'lucide-react'
 
-// June 28, 2026 — 10:00 AM WAT (UTC+1)
-const EVENT_DATE = new Date('2026-06-28T10:00:00+01:00')
+// July 19, 2026 — 10:00 AM WAT (UTC+1)
+const EVENT_DATE = new Date('2026-07-19T10:00:00+01:00')
 
 interface TimeLeft {
   days: number
@@ -52,7 +52,7 @@ export default function CountdownBanner() {
         <Link href="/events" className="flex items-center gap-3 md:gap-5 flex-1 min-w-0 group">
           {/* Label */}
           <span className="font-body text-grit-black text-[10px] md:text-xs font-bold tracking-widest uppercase whitespace-nowrap shrink-0 flex items-center gap-1.5">
-            <Flag size={12} aria-hidden="true" /> Launch Day — 28 June
+            <Flag size={12} aria-hidden="true" /> Launch Day — 19 July
           </span>
 
           {/* Divider */}
