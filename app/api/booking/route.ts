@@ -134,7 +134,7 @@ function buildConfirmationEmail(data: Record<string, string>): string {
         </tr>
         <tr>
           <td style="padding:20px 40px;border-top:1px solid #2A2A2A;text-align:center;">
-            <p style="margin:0;font-size:11px;color:#6B6B6B;">GRIT Quad Biking Arena · Port Harcourt · Open Fri, Sat & Sun 10am–6pm</p>
+            <p style="margin:0;font-size:11px;color:#6B6B6B;">GRIT Quad Biking Arena · Port Harcourt · Open Fri & Sat 10am–6pm</p>
           </td>
         </tr>
       </table>

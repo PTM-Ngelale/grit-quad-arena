@@ -35,7 +35,7 @@ export default function Hero() {
         </p>
 
         <h1 className="font-display leading-none mb-8">
-          <span className="block text-grit-white text-7xl md:text-[10rem]">RIDE.</span>
+          <span className="block text-grit-white text-7xl md:text-[10rem]">RIDE!</span>
           <span className="block text-grit-white text-7xl md:text-[10rem]">FEEL THE</span>
           <span className="block text-grit-orange text-7xl md:text-[10rem]">GRIT.</span>
         </h1>

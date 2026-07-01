@@ -2,12 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  scroll-behavior: smooth;
+}
+
 @layer components {
   .grit-btn {
     @apply relative overflow-hidden bg-grit-orange text-grit-white rounded-none cursor-pointer inline-block;
   }
   .grit-btn::before {
-    content: '';
+    content: "";
     @apply absolute inset-0 bg-white/10 -translate-x-full transition-transform duration-300;
   }
   .grit-btn:hover::before {
@@ -25,8 +29,14 @@
 }
 
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(32px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .animate-fade-up {
