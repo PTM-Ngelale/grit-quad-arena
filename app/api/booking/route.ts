@@ -170,8 +170,8 @@ export async function POST(req: NextRequest) {
     // Notify the business
     sends.push(
       resend.emails.send({
-        from: 'GRIT Arena Bookings <onboarding@resend.dev>',
-        to: ['preciousngelale@gmail.com'],
+        from: 'GRIT Arena Bookings <bookings@gritquad.com>',
+        to: ['gritarena@outlook.com'],
         replyTo: body.email || undefined,
         subject: `New Booking — ${body.name} · ${DURATION_LABELS[body.duration] ?? body.duration}`,
         html: buildNotificationEmail(body),
@@ -182,9 +182,9 @@ export async function POST(req: NextRequest) {
     if (body.email) {
       sends.push(
         resend.emails.send({
-          from: 'GRIT Arena <onboarding@resend.dev>',
+          from: 'GRIT Arena <bookings@gritquad.com>',
           to: [body.email],
-          cc: ['preciousngelale@gmail.com'],
+          cc: ['gritarena@outlook.com'],
           subject: 'Booking request received — GRIT Quad Biking Arena',
           html: buildConfirmationEmail(body),
         }).catch((err) => console.error('[booking confirm error]', err))
