@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { TIME_SLOTS, formatTimeSlot } from "@/lib/timeSlots";
 
 const soloRides = [
   { id: "5min", label: "5 Minutes", price: "₦6,000" },
@@ -55,6 +56,10 @@ export default function BookingForm({
   const [submittedName, setSubmittedName] = useState("");
   const [dateError, setDateError] = useState("");
   const [duration, setDuration] = useState(selectedDuration ?? "");
+  const [date, setDate] = useState("");
+  const [timeSlot, setTimeSlot] = useState("");
+  const [bookedSlots, setBookedSlots] = useState<string[]>([]);
+  const [loadingSlots, setLoadingSlots] = useState(false);
 
   useEffect(() => {
     if (selectedDuration) setDuration(selectedDuration);
@@ -66,12 +71,35 @@ export default function BookingForm({
     return day === 5 || day === 6 || day === 0;
   }
 
+  async function fetchAvailability(value: string) {
+    if (!value || !isOperatingDay(value)) {
+      setBookedSlots([]);
+      return;
+    }
+    setLoadingSlots(true);
+    try {
+      const res = await fetch(
+        `/api/booking/availability?date=${encodeURIComponent(value)}`,
+      );
+      const json = await res.json();
+      setBookedSlots(json.booked ?? []);
+    } catch {
+      setBookedSlots([]);
+    } finally {
+      setLoadingSlots(false);
+    }
+  }
+
   function handleDateChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const value = e.target.value;
+    setDate(value);
+    setTimeSlot("");
     setDateError(
-      isOperatingDay(e.target.value)
+      isOperatingDay(value)
         ? ""
         : "We operate on Fridays & Saturdays. Please pick one of those days.",
     );
+    fetchAvailability(value);
   }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -88,6 +116,7 @@ export default function BookingForm({
       !data.phone?.trim() ||
       !data.duration ||
       !data.date ||
+      !data.timeSlot ||
       !data.riders
     ) {
       setErrorMsg("Please fill in all required fields.");
@@ -112,6 +141,10 @@ export default function BookingForm({
 
       if (!res.ok) {
         const json = await res.json().catch(() => ({}));
+        if (res.status === 409) {
+          setTimeSlot("");
+          fetchAvailability(data.date);
+        }
         throw new Error(
           (json as { error?: string }).error ??
             "Something went wrong. Please try again.",
@@ -221,6 +254,7 @@ export default function BookingForm({
           name="date"
           required
           disabled={isSubmitting}
+          value={date}
           onChange={handleDateChange}
           className={`w-full bg-grit-grey border text-grit-white font-body text-sm px-4 py-3 outline-none focus:border-grit-orange transition-colors disabled:opacity-50 ${dateError ? "border-red-400" : "border-grit-grey/80"}`}
         />
@@ -231,6 +265,38 @@ export default function BookingForm({
             Fridays and Saturdays only
           </p>
         )}
+      </div>
+
+      {/* Time Slot */}
+      <div>
+        <label className="font-body text-grit-sand text-xs tracking-widest uppercase block mb-2">
+          Time Slot <span className="text-grit-orange">*</span>
+        </label>
+        <select
+          name="timeSlot"
+          required
+          disabled={isSubmitting || !date || !!dateError}
+          value={timeSlot}
+          onChange={(e) => setTimeSlot(e.target.value)}
+          className="w-full bg-grit-grey border border-grit-grey/80 text-grit-white font-body text-sm px-4 py-3 outline-none focus:border-grit-orange transition-colors disabled:opacity-50"
+        >
+          <option value="" disabled>
+            {!date
+              ? "Pick a date first"
+              : loadingSlots
+                ? "Checking availability..."
+                : "Select a time"}
+          </option>
+          {TIME_SLOTS.map((slot) => (
+            <option key={slot} value={slot} disabled={bookedSlots.includes(slot)}>
+              {formatTimeSlot(slot)}
+              {bookedSlots.includes(slot) ? " — Booked" : ""}
+            </option>
+          ))}
+        </select>
+        <p className="font-body text-grit-muted text-xs mt-1">
+          Already-booked slots for that day are marked and can&apos;t be selected.
+        </p>
       </div>
 
       {/* Riders */}

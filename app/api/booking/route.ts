@@ -1,5 +1,7 @@
 import { Resend } from 'resend'
 import { NextRequest, NextResponse } from 'next/server'
+import { getSupabaseAdmin } from '@/lib/supabase'
+import { formatTimeSlot } from '@/lib/timeSlots'
 
 const DURATION_LABELS: Record<string, string> = {
   '5min':  '5 Minutes — ₦6,000',
@@ -49,6 +51,10 @@ function buildNotificationEmail(data: Record<string, string>): string {
               <tr>
                 <td style="padding:8px 0;color:#6B6B6B;font-size:13px;border-top:1px solid #2A2A2A;">Preferred Date</td>
                 <td style="padding:8px 0;font-size:13px;color:#F2EDE6;border-top:1px solid #2A2A2A;">${data.date}</td>
+              </tr>
+              <tr>
+                <td style="padding:8px 0;color:#6B6B6B;font-size:13px;">Time Slot</td>
+                <td style="padding:8px 0;font-size:13px;color:#F2EDE6;">${data.timeSlot ? formatTimeSlot(data.timeSlot) : '—'}</td>
               </tr>
               <tr>
                 <td style="padding:8px 0;color:#6B6B6B;font-size:13px;">Duration</td>
@@ -113,6 +119,10 @@ function buildConfirmationEmail(data: Record<string, string>): string {
                 <td style="padding:8px 0;font-size:13px;color:#F2EDE6;">${data.date}</td>
               </tr>
               <tr>
+                <td style="padding:8px 0;color:#6B6B6B;font-size:13px;">Time Slot</td>
+                <td style="padding:8px 0;font-size:13px;color:#F2EDE6;">${data.timeSlot ? formatTimeSlot(data.timeSlot) : '—'}</td>
+              </tr>
+              <tr>
                 <td style="padding:8px 0;color:#6B6B6B;font-size:13px;">Duration</td>
                 <td style="padding:8px 0;font-size:13px;color:#F2EDE6;">${duration}</td>
               </tr>
@@ -149,12 +159,42 @@ export async function POST(req: NextRequest) {
     const body = await req.json() as Record<string, string>
 
     // Validate required fields
-    const missing = ['name', 'phone', 'duration', 'date', 'riders'].filter((f) => !body[f])
+    const missing = ['name', 'phone', 'duration', 'date', 'timeSlot', 'riders'].filter((f) => !body[f])
     if (missing.length) {
       return NextResponse.json(
         { error: `Missing fields: ${missing.join(', ')}` },
         { status: 400 }
       )
+    }
+
+    const supabase = getSupabaseAdmin()
+    if (supabase) {
+      const { error: insertError } = await supabase.from('bookings').insert({
+        name: body.name,
+        phone: body.phone,
+        email: body.email || null,
+        duration: body.duration,
+        date: body.date,
+        time_slot: body.timeSlot,
+        riders: Number(body.riders),
+        shuttle: body.shuttle === 'on',
+        shuttle_pickup: body.shuttlePickup || null,
+        notes: body.notes || null,
+      })
+
+      if (insertError) {
+        if (insertError.code === '23505') {
+          return NextResponse.json(
+            { error: 'That time slot has just been booked by someone else. Please pick another.' },
+            { status: 409 }
+          )
+        }
+        console.error('[booking insert error]', insertError)
+        return NextResponse.json(
+          { error: 'Failed to save booking' },
+          { status: 500 }
+        )
+      }
     }
 
     if (!process.env.RESEND_API_KEY) {
