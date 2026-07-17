@@ -336,6 +336,7 @@ export default function BookingPageContent() {
                   {[
                     "Booked riders must be present 10 minutes prior to their booking time — missing your slot will result in forfeiture of your booking",
                     "Staff take a 15-minute cooldown break at 1:00pm and 4:00pm — no bookings during these windows",
+                    "2:00pm–3:30pm is reserved exclusively for shuttle riders",
                     "Helmets and safety gear provided",
                     "Walk-ins welcome — subject to availability",
                     "Group bookings recommended 24hrs in advance",

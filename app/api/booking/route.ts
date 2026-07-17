@@ -1,7 +1,7 @@
 import { Resend } from 'resend'
 import { NextRequest, NextResponse } from 'next/server'
 import { getSupabaseAdmin } from '@/lib/supabase'
-import { formatTimeSlot, isCooldownSlot } from '@/lib/timeSlots'
+import { formatTimeSlot, isCooldownSlot, isShuttleExclusiveSlot } from '@/lib/timeSlots'
 
 const DURATION_LABELS: Record<string, string> = {
   '5min':  '5 Minutes — ₦6,000',
@@ -196,6 +196,13 @@ export async function POST(req: NextRequest) {
     if (isCooldownSlot(body.timeSlot)) {
       return NextResponse.json(
         { error: 'That time falls within a staff cooldown break. Please choose another time.' },
+        { status: 400 }
+      )
+    }
+
+    if (isShuttleExclusiveSlot(body.timeSlot) && body.shuttle !== 'on') {
+      return NextResponse.json(
+        { error: '2:00pm–3:30pm is reserved exclusively for shuttle riders. Please choose another time or add shuttle pickup.' },
         { status: 400 }
       )
     }

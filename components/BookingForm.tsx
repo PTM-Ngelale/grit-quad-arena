@@ -1,6 +1,11 @@
 "use client";
 import { useState, useEffect } from "react";
-import { TIME_SLOTS, formatTimeSlot, isCooldownSlot } from "@/lib/timeSlots";
+import {
+  TIME_SLOTS,
+  formatTimeSlot,
+  isCooldownSlot,
+  isShuttleExclusiveSlot,
+} from "@/lib/timeSlots";
 
 const soloRides = [
   { id: "5min", label: "5 Minutes", price: "₦6,000" },
@@ -205,6 +210,14 @@ export default function BookingForm({
       return;
     }
 
+    if (isShuttleExclusiveSlot(data.timeSlot) && data.shuttle !== "on") {
+      setErrorMsg(
+        "2:00pm–3:30pm is reserved exclusively for shuttle riders. Please choose another time or add shuttle pickup.",
+      );
+      setStatus("error");
+      return;
+    }
+
     try {
       const res = await fetch("/api/booking", {
         method: "POST",
@@ -388,24 +401,36 @@ export default function BookingForm({
                 ? "Checking availability..."
                 : "Select a time"}
           </option>
-          {TIME_SLOTS.map((slot) => (
-            <option
-              key={slot}
-              value={slot}
-              disabled={bookedSlots.includes(slot) || isCooldownSlot(slot)}
-            >
-              {formatTimeSlot(slot)}
-              {isCooldownSlot(slot)
-                ? " — Staff Cooldown"
-                : bookedSlots.includes(slot)
-                  ? " — Booked"
-                  : ""}
-            </option>
-          ))}
+          {TIME_SLOTS.map((slot) => {
+            const shuttleOnly = isShuttleExclusiveSlot(slot) && !wantsShuttle;
+            return (
+              <option
+                key={slot}
+                value={slot}
+                disabled={
+                  bookedSlots.includes(slot) ||
+                  isCooldownSlot(slot) ||
+                  shuttleOnly
+                }
+              >
+                {formatTimeSlot(slot)}
+                {isCooldownSlot(slot)
+                  ? " — Staff Cooldown"
+                  : bookedSlots.includes(slot)
+                    ? " — Booked"
+                    : shuttleOnly
+                      ? " — Shuttle Riders Only"
+                      : ""}
+              </option>
+            );
+          })}
         </select>
         <p className="font-body text-grit-muted text-xs mt-1">
           Already-booked slots and staff cooldown breaks (1:00–1:15pm &amp;
           4:00–4:15pm) are marked and can&apos;t be selected.
+        </p>
+        <p className="font-body text-grit-muted text-xs mt-1">
+          2:00pm–3:30pm is reserved exclusively for shuttle riders.
         </p>
         <p className="font-body text-grit-orange text-xs mt-1">
           Booked riders must be present 10 minutes prior to their booking
@@ -580,7 +605,13 @@ export default function BookingForm({
             type="checkbox"
             name="shuttle"
             checked={wantsShuttle}
-            onChange={(e) => setWantsShuttle(e.target.checked)}
+            onChange={(e) => {
+              const checked = e.target.checked;
+              setWantsShuttle(checked);
+              if (!checked && isShuttleExclusiveSlot(timeSlot)) {
+                setTimeSlot("");
+              }
+            }}
             disabled={isSubmitting}
             className="mt-1 accent-grit-orange"
           />
