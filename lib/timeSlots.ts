@@ -5,6 +5,14 @@ export const TIME_SLOTS = [
   "16:00", "16:30", "17:00", "17:30",
 ];
 
+// Staff lunch/break windows — 15 minutes each, starting at 1pm and 4pm.
+// Both fall at the start of a 30-minute slot, so the whole slot is blocked.
+export const COOLDOWN_SLOTS = ["13:00", "16:00"];
+
+export function isCooldownSlot(slot: string): boolean {
+  return COOLDOWN_SLOTS.includes(slot);
+}
+
 export function formatTimeSlot(slot: string): string {
   const [h, m] = slot.split(":").map(Number);
   const period = h >= 12 ? "pm" : "am";

@@ -57,10 +57,10 @@ const gelTeam = [
 /* ── Quad biking ─────────────────────────────────────────── */
 
 const soloRides = [
-  { id: '5min',  duration: '5 min',  price: '₦6,000',  label: 'Quick Thrill',   featured: false },
-  { id: '10min', duration: '10 min', price: '₦10,000', label: 'Perfect Start',  featured: false },
-  { id: '15min', duration: '15 min', price: '₦13,000', label: 'Most Popular',   featured: true  },
-  { id: '30min', duration: '30 min', price: '₦25,000', label: 'Premium Ride',   featured: false },
+  { id: '5min',  duration: '5 min',  price: '₦6,000',  label: 'Quick Thrill',   featured: false, dmToBook: false },
+  { id: '10min', duration: '10 min', price: '₦10,000', label: 'Perfect Start',  featured: false, dmToBook: false },
+  { id: '15min', duration: '15 min', price: '₦13,000', label: 'Most Popular',   featured: true,  dmToBook: false },
+  { id: '30min', duration: '30 min', price: 'DM to Book', label: 'Premium Ride', featured: false, dmToBook: true },
 ]
 
 const groupRates = [
@@ -115,29 +115,48 @@ export default function Pricing() {
         <div className="mb-4">
           <p className="font-body text-grit-sand text-xs tracking-widest uppercase mb-6">Solo Rides</p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {soloRides.map((ride) => (
-              <Link
-                key={ride.duration}
-                href={`/booking?duration=${ride.id}#your-details`}
-                data-reveal
-                className={`opacity-0-init relative p-6 bg-grit-grey block transition-colors hover:border-grit-orange ${
-                  ride.featured ? 'border-2 border-grit-orange' : 'border border-grit-grey'
-                }`}
-              >
-                {ride.featured && (
-                  <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 font-body text-xs font-bold text-grit-black bg-grit-orange px-3 py-1 whitespace-nowrap">
-                    POPULAR
-                  </span>
-                )}
-                <p className="font-display text-grit-orange text-4xl md:text-5xl leading-none mb-1">
-                  {ride.duration}
-                </p>
-                <p className="font-display text-grit-white text-2xl md:text-3xl leading-none mb-3">
-                  {ride.price}
-                </p>
-                <p className="font-body text-grit-muted text-xs">{ride.label}</p>
-              </Link>
-            ))}
+            {soloRides.map((ride) =>
+              ride.dmToBook ? (
+                <a
+                  key={ride.duration}
+                  href={`https://wa.me/447443023079?text=${encodeURIComponent(`Hi! I'd like to book the ${ride.duration} premium ride.`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-reveal
+                  className="opacity-0-init relative p-6 bg-grit-grey block transition-colors hover:border-grit-orange border border-grit-orange/40"
+                >
+                  <p className="font-display text-grit-orange text-4xl md:text-5xl leading-none mb-1">
+                    {ride.duration}
+                  </p>
+                  <p className="font-display text-grit-white text-xl md:text-2xl leading-none mb-3">
+                    {ride.price}
+                  </p>
+                  <p className="font-body text-grit-muted text-xs">{ride.label}</p>
+                </a>
+              ) : (
+                <Link
+                  key={ride.duration}
+                  href={`/booking?duration=${ride.id}#your-details`}
+                  data-reveal
+                  className={`opacity-0-init relative p-6 bg-grit-grey block transition-colors hover:border-grit-orange ${
+                    ride.featured ? 'border-2 border-grit-orange' : 'border border-grit-grey'
+                  }`}
+                >
+                  {ride.featured && (
+                    <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 font-body text-xs font-bold text-grit-black bg-grit-orange px-3 py-1 whitespace-nowrap">
+                      POPULAR
+                    </span>
+                  )}
+                  <p className="font-display text-grit-orange text-4xl md:text-5xl leading-none mb-1">
+                    {ride.duration}
+                  </p>
+                  <p className="font-display text-grit-white text-2xl md:text-3xl leading-none mb-3">
+                    {ride.price}
+                  </p>
+                  <p className="font-body text-grit-muted text-xs">{ride.label}</p>
+                </Link>
+              )
+            )}
           </div>
         </div>
 
@@ -145,7 +164,7 @@ export default function Pricing() {
         <div className="mb-12" data-reveal>
           <div className="flex items-baseline gap-4 mb-6 mt-12">
             <p className="font-body text-grit-sand text-xs tracking-widest uppercase">Group Deals</p>
-            <p className="font-body text-grit-muted text-xs">Ride together and save more</p>
+            <p className="font-body text-grit-muted text-xs">Ride together and save more — up to 12.5% off per rider</p>
           </div>
 
           <div className="overflow-x-auto">
@@ -157,15 +176,19 @@ export default function Pricing() {
                   </th>
                   <th className="font-body text-grit-muted text-xs tracking-widest uppercase text-center py-3 px-3">
                     3 Riders
+                    <span className="block text-grit-orange normal-case font-semibold mt-0.5">Save 5%</span>
                   </th>
                   <th className="font-body text-grit-muted text-xs tracking-widest uppercase text-center py-3 px-3">
                     4 Riders
+                    <span className="block text-grit-orange normal-case font-semibold mt-0.5">Save 7.5%</span>
                   </th>
                   <th className="font-body text-grit-muted text-xs tracking-widest uppercase text-center py-3 px-3">
                     5 Riders
+                    <span className="block text-grit-orange normal-case font-semibold mt-0.5">Save 10%</span>
                   </th>
                   <th className="font-body text-grit-muted text-xs tracking-widest uppercase text-center py-3 px-3">
                     6 Riders
+                    <span className="block text-grit-orange normal-case font-semibold mt-0.5">Save 12.5%</span>
                   </th>
                 </tr>
               </thead>
@@ -184,6 +207,10 @@ export default function Pricing() {
             </table>
           </div>
           <p className="font-body text-grit-muted text-xs mt-4">
+            Group rates apply to 3–6 riders booking the same duration.{' '}
+            <strong className="text-grit-white/80">Note: the discount does not apply to a group of 2</strong> — pairs are charged at the solo per-rider rate.
+          </p>
+          <p className="font-body text-grit-muted text-xs mt-1">
             30-minute group rates available on request — contact us for a quote.
           </p>
         </div>

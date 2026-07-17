@@ -5,17 +5,20 @@ import { Star } from 'lucide-react'
 const testimonials = [
   {
     quote: "Best experience in PH! Rode for the first time and I was hooked. Can't wait to come back.",
-    name: 'Collins',
+    name: 'Collins Tochi',
+    initials: 'CT',
     label: 'Port Harcourt',
   },
   {
     quote: 'Took my team here for a bonding day. GRIT delivered — everyone had an absolute blast.',
-    name: 'Tamara',
+    name: 'Tamara Ibiye',
+    initials: 'TI',
     label: 'Corporate Client',
   },
   {
     quote: 'My kids loved it. Staff were super helpful and safety-conscious. Highly recommend.',
-    name: 'Charles',
+    name: 'Charles Peters',
+    initials: 'CP',
     label: 'Parent',
   },
 ]
@@ -35,8 +38,10 @@ export default function Testimonials() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {testimonials.map((t, i) => (
             <div key={i} data-reveal className="opacity-0-init bg-grit-black p-8">
-              {/* Avatar placeholder */}
-              <div className="w-12 h-12 rounded-full bg-grit-grey mb-6" />
+              {/* Avatar with initials */}
+              <div className="w-12 h-12 rounded-full bg-grit-grey border border-grit-orange/40 flex items-center justify-center mb-6">
+                <span className="font-display text-grit-orange text-sm">{t.initials}</span>
+              </div>
               {/* Stars */}
               <div className="flex gap-1 mb-4" aria-label="5 out of 5 stars">
                 {Array.from({ length: 5 }).map((_, s) => (

@@ -1,14 +1,25 @@
 import { Resend } from 'resend'
 import { NextRequest, NextResponse } from 'next/server'
 import { getSupabaseAdmin } from '@/lib/supabase'
-import { formatTimeSlot } from '@/lib/timeSlots'
+import { formatTimeSlot, isCooldownSlot } from '@/lib/timeSlots'
 
 const DURATION_LABELS: Record<string, string> = {
   '5min':  '5 Minutes — ₦6,000',
   '10min': '10 Minutes — ₦10,000',
   '15min': '15 Minutes — ₦13,000',
-  '30min': '30 Minutes — ₦25,000',
-  'group': 'Group Ride (3–6 riders)',
+  '30min': '30 Minutes (Premium) — DM to Book',
+  '5min-g3':  '5 Minutes · Group of 3 — ₦17,100',
+  '5min-g4':  '5 Minutes · Group of 4 — ₦22,200',
+  '5min-g5':  '5 Minutes · Group of 5 — ₦27,000',
+  '5min-g6':  '5 Minutes · Group of 6 — ₦31,500',
+  '10min-g3': '10 Minutes · Group of 3 — ₦28,500',
+  '10min-g4': '10 Minutes · Group of 4 — ₦37,000',
+  '10min-g5': '10 Minutes · Group of 5 — ₦45,000',
+  '10min-g6': '10 Minutes · Group of 6 — ₦52,500',
+  '15min-g3': '15 Minutes · Group of 3 — ₦37,050',
+  '15min-g4': '15 Minutes · Group of 4 — ₦48,100',
+  '15min-g5': '15 Minutes · Group of 5 — ₦58,500',
+  '15min-g6': '15 Minutes · Group of 6 — ₦68,250',
 }
 
 const SHUTTLE_LABELS: Record<string, string> = {
@@ -20,6 +31,15 @@ function buildNotificationEmail(data: Record<string, string>): string {
   const duration   = DURATION_LABELS[data.duration] ?? data.duration
   const shuttleLine = data.shuttle === 'on'
     ? `<tr><td style="padding:8px 0;color:#6B6B6B;font-size:13px;">Shuttle Pickup</td><td style="padding:8px 0;font-size:13px;">${SHUTTLE_LABELS[data.shuttlePickup] ?? data.shuttlePickup ?? 'Requested (pickup TBC)'}</td></tr>`
+    : ''
+  const isMinor = data.ageCategory === 'minor'
+  const waiverLine = isMinor
+    ? `<tr><td style="padding:8px 0;color:#6B6B6B;font-size:13px;">Waiver</td><td style="padding:8px 0;font-size:13px;color:#F2EDE6;">✔ Accepted — Parent/Guardian Consent (Under 18)</td></tr>
+       <tr><td style="padding:8px 0;color:#6B6B6B;font-size:13px;">Participant</td><td style="padding:8px 0;font-size:13px;color:#F2EDE6;">${data.participantName} (age ${data.participantAge})</td></tr>
+       <tr><td style="padding:8px 0;color:#6B6B6B;font-size:13px;">Parent/Guardian</td><td style="padding:8px 0;font-size:13px;color:#F2EDE6;">${data.guardianName}</td></tr>`
+    : `<tr><td style="padding:8px 0;color:#6B6B6B;font-size:13px;">Waiver</td><td style="padding:8px 0;font-size:13px;color:#F2EDE6;">✔ Accepted — Adult Waiver (18+)</td></tr>`
+  const minorBadgeRow = isMinor
+    ? `<tr><td colspan="2" style="padding:10px 12px;background:#CC1111;color:#fff;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;">⚠ Under-18 Rider — Verify Parent/Guardian On Site</td></tr>`
     : ''
 
   return `
@@ -43,6 +63,7 @@ function buildNotificationEmail(data: Record<string, string>): string {
         <tr>
           <td style="padding:0 40px 32px;">
             <table width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid #2A2A2A;">
+              ${minorBadgeRow}
               <tr>
                 <td style="padding:8px 0;color:#6B6B6B;font-size:13px;width:140px;">Phone</td>
                 <td style="padding:8px 0;font-size:13px;color:#F2EDE6;">${data.phone}</td>
@@ -64,6 +85,7 @@ function buildNotificationEmail(data: Record<string, string>): string {
                 <td style="padding:8px 0;color:#6B6B6B;font-size:13px;">Riders</td>
                 <td style="padding:8px 0;font-size:13px;color:#F2EDE6;">${data.riders}</td>
               </tr>
+              ${waiverLine}
               ${shuttleLine}
               ${data.notes ? `<tr><td style="padding:8px 0;color:#6B6B6B;font-size:13px;border-top:1px solid #2A2A2A;vertical-align:top;">Notes</td><td style="padding:8px 0;font-size:13px;color:#F2EDE6;border-top:1px solid #2A2A2A;">${data.notes}</td></tr>` : ''}
             </table>
@@ -95,6 +117,9 @@ function buildNotificationEmail(data: Record<string, string>): string {
 
 function buildConfirmationEmail(data: Record<string, string>): string {
   const duration = DURATION_LABELS[data.duration] ?? data.duration
+  const waiverConfirmLine = data.ageCategory === 'minor'
+    ? `<tr><td style="padding:8px 0;color:#6B6B6B;font-size:13px;">Waiver</td><td style="padding:8px 0;font-size:13px;color:#F2EDE6;">Signed — Parent/Guardian Consent (Under 18)</td></tr>`
+    : `<tr><td style="padding:8px 0;color:#6B6B6B;font-size:13px;">Waiver</td><td style="padding:8px 0;font-size:13px;color:#F2EDE6;">Signed — Adult Waiver (18+)</td></tr>`
 
   return `
 <!DOCTYPE html>
@@ -130,6 +155,7 @@ function buildConfirmationEmail(data: Record<string, string>): string {
                 <td style="padding:8px 0;color:#6B6B6B;font-size:13px;">Riders</td>
                 <td style="padding:8px 0;font-size:13px;color:#F2EDE6;">${data.riders}</td>
               </tr>
+              ${waiverConfirmLine}
             </table>
           </td>
         </tr>
@@ -159,12 +185,40 @@ export async function POST(req: NextRequest) {
     const body = await req.json() as Record<string, string>
 
     // Validate required fields
-    const missing = ['name', 'phone', 'duration', 'date', 'timeSlot', 'riders'].filter((f) => !body[f])
+    const missing = ['name', 'phone', 'duration', 'date', 'timeSlot', 'riders', 'ageCategory'].filter((f) => !body[f])
     if (missing.length) {
       return NextResponse.json(
         { error: `Missing fields: ${missing.join(', ')}` },
         { status: 400 }
       )
+    }
+
+    if (isCooldownSlot(body.timeSlot)) {
+      return NextResponse.json(
+        { error: 'That time falls within a staff cooldown break. Please choose another time.' },
+        { status: 400 }
+      )
+    }
+
+    if (body.ageCategory !== 'adult' && body.ageCategory !== 'minor') {
+      return NextResponse.json({ error: 'Invalid age category.' }, { status: 400 })
+    }
+
+    if (body.waiverAccepted !== 'on') {
+      return NextResponse.json(
+        { error: 'Waiver must be accepted before booking can be submitted.' },
+        { status: 400 }
+      )
+    }
+
+    if (body.ageCategory === 'minor') {
+      const minorMissing = ['participantName', 'guardianName', 'participantAge'].filter((f) => !body[f])
+      if (minorMissing.length) {
+        return NextResponse.json(
+          { error: `Missing fields: ${minorMissing.join(', ')}` },
+          { status: 400 }
+        )
+      }
     }
 
     const supabase = getSupabaseAdmin()
@@ -180,6 +234,11 @@ export async function POST(req: NextRequest) {
         shuttle: body.shuttle === 'on',
         shuttle_pickup: body.shuttlePickup || null,
         notes: body.notes || null,
+        age_category: body.ageCategory,
+        waiver_accepted: body.waiverAccepted === 'on',
+        participant_name: body.ageCategory === 'minor' ? body.participantName : null,
+        guardian_name: body.ageCategory === 'minor' ? body.guardianName : null,
+        participant_age: body.ageCategory === 'minor' ? Number(body.participantAge) : null,
       })
 
       if (insertError) {
@@ -213,7 +272,7 @@ export async function POST(req: NextRequest) {
         from: 'GRIT Arena Bookings <bookings@gritquad.com>',
         to: ['gritarena@outlook.com'],
         replyTo: body.email || undefined,
-        subject: `New Booking — ${body.name} · ${DURATION_LABELS[body.duration] ?? body.duration}`,
+        subject: `${body.ageCategory === 'minor' ? '⚠ MINOR — ' : ''}New Booking — ${body.name} · ${DURATION_LABELS[body.duration] ?? body.duration}`,
         html: buildNotificationEmail(body),
       }).catch((err) => console.error('[booking notify error]', err))
     )

@@ -2,6 +2,7 @@ import Navbar from '@/components/Navbar'
 import Hero from '@/components/Hero'
 import About from '@/components/About'
 import Experiences from '@/components/Experiences'
+import BrandDivider from '@/components/BrandDivider'
 import HowItWorks from '@/components/HowItWorks'
 import Gallery from '@/components/Gallery'
 import Pricing from '@/components/Pricing'
@@ -19,8 +20,10 @@ export default function Home() {
       <Hero />
       <About />
       <Experiences />
+      <BrandDivider src="/images/o.jpg" alt="GRIT tire emblem" />
       <HowItWorks />
       <Gallery />
+      <BrandDivider src="/images/x.jpg" alt="GRIT Adventure Arena emblem" />
       <Pricing />
       <Testimonials />
       <BookingCTA />

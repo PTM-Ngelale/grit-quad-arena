@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 const navLinks = [
   { href: "/#about", label: "About" },
   { href: "/#experiences", label: "Experiences" },
@@ -14,13 +16,13 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
           {/* Brand */}
           <div>
-            <div className="flex items-baseline gap-2 mb-3">
-              <span className="font-display text-grit-orange text-3xl leading-none">
-                GRIT
-              </span>
-              <span className="font-body text-grit-white text-xs font-medium tracking-widest uppercase">
-                Quad Arena
-              </span>
+            <div className="relative w-40 h-16 mb-3 -ml-2">
+              <Image
+                src="/images/grit.jpg"
+                alt="GRIT Quad Arena"
+                fill
+                className="object-contain object-left"
+              />
             </div>
             <p className="font-body text-grit-muted text-sm leading-relaxed mb-4">
               Port Harcourt&apos;s Premier Quad Biking Arena

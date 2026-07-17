@@ -38,13 +38,22 @@ export default function About() {
           </div>
 
           {/* Venue photo */}
-          <div data-reveal className="opacity-0-init">
+          <div data-reveal className="opacity-0-init relative">
             <div className="aspect-[4/3] relative overflow-hidden">
               <Image
                 src="/images/track-shot-1.jpg"
                 alt="GRIT Quad Biking Arena venue at sunset with GRIT flags"
                 fill
                 className="object-cover object-center"
+              />
+            </div>
+            {/* Rugged brand badge */}
+            <div className="absolute -bottom-4 -right-4 w-24 h-24 md:-bottom-6 md:-right-6 md:w-36 md:h-36 shadow-xl">
+              <Image
+                src="/images/stone.jpg"
+                alt="GRIT Adventure Arena rock emblem"
+                fill
+                className="object-cover"
               />
             </div>
           </div>
