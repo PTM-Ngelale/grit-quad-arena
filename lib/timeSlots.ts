@@ -13,6 +13,14 @@ export function isCooldownSlot(slot: string): boolean {
   return COOLDOWN_SLOTS.includes(slot);
 }
 
+// Shuttle service gets an exclusive block, 2:00pm-3:30pm, reserved in case of
+// a high shuttle turnout — only shuttle bookings may take these slots.
+export const SHUTTLE_EXCLUSIVE_SLOTS = ["14:00", "14:30", "15:00"];
+
+export function isShuttleExclusiveSlot(slot: string): boolean {
+  return SHUTTLE_EXCLUSIVE_SLOTS.includes(slot);
+}
+
 export function formatTimeSlot(slot: string): string {
   const [h, m] = slot.split(":").map(Number);
   const period = h >= 12 ? "pm" : "am";
