@@ -23,7 +23,7 @@ export default function BookingCTA() {
             Call Us
           </a>
           <a
-            href="https://wa.me/447443023079"
+            href="https://wa.me/08078591455"
             target="_blank"
             rel="noopener noreferrer"
             className="font-body font-semibold px-8 py-4 text-base bg-grit-white text-grit-black hover:bg-grit-white/80 transition-colors"

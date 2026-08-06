@@ -60,7 +60,7 @@ function SuccessCard({ name }: { name: string }) {
         WhatsApp or phone within 24 hours.
       </p>
       <a
-        href="https://wa.me/447443023079"
+        href="https://wa.me/08078591455"
         target="_blank"
         rel="noopener noreferrer"
         className="grit-btn font-body font-semibold text-sm px-8 py-4 inline-block"
@@ -348,7 +348,7 @@ export default function BookingForm({
             DM us on WhatsApp to lock in your slot.
           </p>
           <a
-            href={`https://wa.me/447443023079?text=${encodeURIComponent("Hi! I'd like to book the 30 Minutes premium ride.")}`}
+            href={`https://wa.me/08078591455?text=${encodeURIComponent("Hi! I'd like to book the 30 Minutes premium ride.")}`}
             target="_blank"
             rel="noopener noreferrer"
             className="grit-btn font-body font-semibold text-sm px-8 py-4 inline-block"

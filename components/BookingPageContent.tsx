@@ -95,7 +95,7 @@ export default function BookingPageContent() {
               ride.dmToBook ? (
                 <a
                   key={ride.id}
-                  href={`https://wa.me/447443023079?text=${encodeURIComponent(`Hi! I'd like to book the ${ride.label} premium ride.`)}`}
+                  href={`https://wa.me/08078591455?text=${encodeURIComponent(`Hi! I'd like to book the ${ride.label} premium ride.`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="relative p-5 bg-grit-black text-left w-full block border border-grit-orange/40 hover:border-grit-orange transition-all duration-200"
@@ -276,7 +276,7 @@ export default function BookingPageContent() {
                     0704 082 0199
                   </a>
                   <a
-                    href="https://wa.me/447443023079"
+                    href="https://wa.me/08078591455"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="font-body font-semibold px-6 py-3 text-sm border border-grit-white/30 text-grit-white hover:border-grit-orange hover:text-grit-orange transition-colors text-center"

@@ -119,7 +119,7 @@ export default function Pricing() {
               ride.dmToBook ? (
                 <a
                   key={ride.duration}
-                  href={`https://wa.me/447443023079?text=${encodeURIComponent(`Hi! I'd like to book the ${ride.duration} premium ride.`)}`}
+                  href={`https://wa.me/08078591455?text=${encodeURIComponent(`Hi! I'd like to book the ${ride.duration} premium ride.`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   data-reveal
@@ -306,7 +306,7 @@ export default function Pricing() {
             </div>
             <div className="shrink-0">
               <a
-                href="https://wa.me/447443023079"
+                href="https://wa.me/08078591455"
                 className="font-body font-semibold text-sm px-6 py-3 bg-grit-orange text-grit-white hover:bg-grit-orange/90 transition-colors inline-block"
               >
                 Request Shuttle <ArrowRight size={14} className="inline-block" aria-hidden="true" />
