@@ -151,7 +151,7 @@ export default function Contact() {
               />
             </div>
             <a
-              href="https://wa.me/08078591455"
+              href="https://wa.me/+2348078591455"
               target="_blank"
               rel="noopener noreferrer"
               className="grit-btn block text-center font-body font-semibold text-sm py-4"

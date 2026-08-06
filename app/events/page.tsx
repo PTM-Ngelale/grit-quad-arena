@@ -174,7 +174,7 @@ export default function EventsPage() {
                         {event.spots}
                       </p>
                       <a
-                        href="https://wa.me/08078591455"
+                        href="https://wa.me/+2348078591455"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="grit-btn font-body font-semibold text-sm px-6 py-3 text-center"
@@ -251,7 +251,7 @@ export default function EventsPage() {
               Start Planning
             </a>
             <a
-              href="https://wa.me/08078591455"
+              href="https://wa.me/+2348078591455"
               target="_blank"
               rel="noopener noreferrer"
               className="font-body font-semibold px-8 py-4 text-base bg-grit-white text-grit-black hover:bg-grit-white/80 transition-colors"
