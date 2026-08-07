@@ -123,9 +123,29 @@ export default function Footer() {
 
         {/* Bottom bar */}
         <div className="border-t border-grit-grey pt-8">
-          <p className="font-body text-grit-muted text-xs text-center">
-            © 2026 GRIT Quad Biking Arena. All rights reserved.
-          </p>
+          <div className="flex flex-col items-center gap-4 md:flex-row md:justify-between">
+            <p className="font-body text-grit-muted text-xs text-center md:text-left">
+              © 2026 GRIT Quad Biking Arena. All rights reserved.
+            </p>
+            <a
+              href="https://nanotekai.vercel.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 rounded-full border border-grit-grey bg-white px-3 py-2 hover:border-grit-orange transition-colors"
+            >
+              <span className="font-body text-[11px] uppercase tracking-[0.25em] text-grit-black">
+                Powered By:
+              </span>
+              <div className="relative h-7 w-24">
+                <Image
+                  src="/images/nanotek-logo.png"
+                  alt="Nanotek AI"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+            </a>
+          </div>
         </div>
       </div>
     </footer>
