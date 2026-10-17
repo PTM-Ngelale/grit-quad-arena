@@ -128,22 +128,26 @@ export default function Footer() {
               © 2026 GRIT Quad Biking Arena. All rights reserved.
             </p>
             <a
+              className="site-footer__credit flex items-center gap-2 rounded-full border border-grit-grey bg-white px-3 py-2 hover:border-grit-orange transition-colors"
               href="https://nanotekai.vercel.app/"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 rounded-full border border-grit-grey bg-white px-3 py-2 hover:border-grit-orange transition-colors"
             >
               <span className="font-body text-[11px] uppercase tracking-[0.25em] text-grit-black">
-                Powered By:
+                Powered by
               </span>
-              <div className="relative h-7 w-24">
-                <Image
-                  src="/images/nanotek-logo.png"
-                  alt="Nanotek AI"
-                  fill
-                  className="object-contain"
-                />
-              </div>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/images/nanotek-logo-360.webp"
+                srcSet="/images/nanotek-logo-180.webp 180w, /images/nanotek-logo-360.webp 360w"
+                sizes="76px"
+                width={360}
+                height={76}
+                alt="Nanotek"
+                loading="lazy"
+                decoding="async"
+                className="h-4 w-[76px]"
+              />
             </a>
           </div>
         </div>
