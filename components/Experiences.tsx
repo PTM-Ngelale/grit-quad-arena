@@ -87,6 +87,22 @@ export default function Experiences() {
           ))}
         </div>
 
+        {/* The whole arena as a live 3D model (public/3d/grit-quad.html, by NanoTek): loads lazily, animates only on screen */}
+        <div
+          data-reveal
+          className="opacity-0-init relative aspect-[4/5] sm:aspect-video overflow-hidden bg-grit-black border border-grit-white/10 mb-6"
+        >
+          <iframe
+            src="/3d/grit-quad.html"
+            title="3D model of the GRIT arena: the tyre-fenced quad track, the lounge, the archery range and the Jell Blasters arena"
+            loading="lazy"
+            className="absolute inset-0 w-full h-full border-0"
+          />
+          <span className="absolute top-3 left-3 font-body text-xs font-bold text-grit-black bg-grit-orange px-2 py-1 pointer-events-none">
+            THE ARENA
+          </span>
+        </div>
+
         {/* Track modes strip */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
           {trackModes.map((mode) => (
