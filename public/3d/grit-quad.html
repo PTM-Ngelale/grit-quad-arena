@@ -1,0 +1,701 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex" />
+<title>Grit Quad Arena 3D</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<!--
+  10-second looping 3D animation of Grit Quad Arena (quad biking & games arena, Port Harcourt),
+  made for a vertical 9:16 video. Layout follows the owner's sketch: the big tyre-fenced biking
+  arena at the back, the lounge facing it, the gel blasters arena and the archery range on the left.
+  Embedded copy for the venue's own website (from nanotekai.com/motion/).
+  Query params:
+    ?still=4.2   freeze the clock at 4.2s (for screenshots)
+    ?noao        skip the GTAO pass (faster on weak GPUs)
+-->
+<style>
+  :root {
+    --black: #0d0d0d;
+    --grey: #1a1a1a;
+    --red: #cc1111;
+    --sand: #c9a96e;
+    --white: #f2ede6;
+    --muted: #8f8a83;
+  }
+  html, body { margin: 0; height: 100%; overflow: hidden; background: var(--black); }
+  canvas { display: block; width: 100vw; height: 100vh; }
+  .card {
+    position: fixed; left: 50%; top: 6vh; transform: translateX(-50%);
+    width: max-content; max-width: 86vw; box-sizing: border-box;
+    padding: 2.2vh 5vh 2vh; border-radius: 2.4vh; text-align: center;
+    background: rgba(26, 26, 26, 0.62);
+    border: 1px solid rgba(242, 237, 230, 0.14);
+    box-shadow: 0 1.4vh 4vh rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(18px) saturate(1.2);
+    -webkit-backdrop-filter: blur(18px) saturate(1.2);
+    font-family: "Inter", system-ui, sans-serif; color: var(--white);
+    opacity: 0; translate: 0 -1.5vh;
+    transition: opacity .6s cubic-bezier(.2,.8,.2,1) .9s, translate .6s cubic-bezier(.2,.8,.2,1) .9s;
+  }
+  .card.in { opacity: 1; translate: 0 0; }
+  /* a small sign: the name, a red rule, the line from the site underneath */
+  .head { display: flex; flex-direction: column; align-items: center; gap: .9vh; white-space: nowrap; }
+  .head b { font: 400 5vh/0.95 "Bebas Neue", sans-serif; letter-spacing: .06em; text-transform: uppercase; color: var(--white); }
+  .rule { display: block; width: 7vh; height: .3vh; border-radius: .3vh; background: linear-gradient(90deg, transparent, var(--red), var(--red), transparent); }
+  .head span.sub { font: 400 2.7vh/1 "Bebas Neue", sans-serif; letter-spacing: .12em; text-transform: uppercase; color: var(--sand); }
+  .head span.sub em { font-style: normal; color: var(--red); }
+  /* studio credit, bottom-right */
+  .credit {
+    position: fixed; right: 2.2vh; bottom: 2vh; z-index: 5;
+    display: inline-flex; align-items: center; gap: .8vh;
+    font: 500 1.3vh "Inter", system-ui, sans-serif; letter-spacing: .02em; color: var(--muted);
+    text-decoration: none; opacity: .72; transition: opacity .2s ease;
+  }
+  .credit:hover, .credit:focus-visible { opacity: 1; }
+  .credit img { height: 1.7vh; width: auto; display: block; }
+  /* embedded in the venue's own site: its section heading replaces this card */
+  .card { display: none !important; }
+</style>
+</head>
+<body>
+<a class="credit" href="https://nanotekai.com" target="_blank" rel="noopener">Powered by <img src="logo-white.png" alt="NanoTek" /></a>
+<div class="card" id="card">
+  <div class="head"><b>Grit Quad Arena</b><i class="rule" aria-hidden="true"></i><span class="sub">Ride! Feel the <em>Grit.</em></span></div>
+</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+  }
+}
+</script>
+<script type="module">
+import * as THREE from "three";
+import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
+import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
+import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
+import { GTAOPass } from "three/addons/postprocessing/GTAOPass.js";
+import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
+
+const params = new URLSearchParams(location.search);
+const STILL = params.has("still") ? parseFloat(params.get("still")) : null;
+const REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const LOOP = 10; // seconds
+
+// Palette: Grit black, red and sand, with earth, rubber and turf.
+const C = {
+  slabSide: 0x1a1a1a, slab: 0x2a2622, yard: 0x6e5b45, dirt: 0x9a7650, track: 0x7a5a3a, mound: 0xa98458,
+  black: 0x0d0d0d, rubber: 0x161616, red: 0xcc1111, sand: 0xc9a96e, white: 0xf2ede6, grey: 0x3a3a3a,
+  concrete: 0x8c8a86, wood: 0x8a5a34, woodDark: 0x5a3a22, felt: 0x1f6b3e, turf: 0x2f5a32, turfDark: 0x274b2a,
+  palm: 0x4f8a3c, palmDark: 0x3a6b2e, trunk: 0x8a6a4a, skin: 0x7a4a2c, gold: 0xe8b830, blue: 0x2f6fd0,
+  gelA: 0x39e6c0, gelB: 0xff7a1a,
+};
+
+// ---------- renderer / scene ----------
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: STILL !== null });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(innerWidth, innerHeight);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.3;
+document.body.prepend(renderer.domElement);
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x121110);
+
+const camera = new THREE.PerspectiveCamera(30, innerWidth / innerHeight, 0.1, 300);
+const target = new THREE.Vector3(0, 0.9, 0);
+// Camera sits mostly in front (+z), a little to the left, so the sketch reads the same way up on screen.
+const VIEW = -0.18;
+function fitDist() {
+  const half = THREE.MathUtils.degToRad(camera.fov / 2);
+  const byWidth = 9.9 / Math.tan(Math.atan(Math.tan(half) * camera.aspect));
+  const byHeight = 9.3 / Math.tan(half);
+  return Math.max(byWidth, byHeight);
+}
+function frameView() {
+  camera.aspect = innerWidth / innerHeight;
+  camera.clearViewOffset();
+  camera.updateProjectionMatrix();
+}
+frameView();
+
+// Late-afternoon sun: warm key with shadows, soft sky fill.
+scene.add(new THREE.HemisphereLight(0xfff1dc, 0x4a3a2c, 1.9));
+const sun = new THREE.DirectionalLight(0xffe2b8, 2.8);
+sun.position.set(-8, 15, 7);
+sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048);
+Object.assign(sun.shadow.camera, { left: -13, right: 13, top: 13, bottom: -13, near: 1, far: 50 });
+sun.shadow.radius = 4;
+sun.shadow.bias = -0.0006;
+sun.shadow.normalBias = 0.02;
+scene.add(sun);
+
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+if (!params.has("noao")) {
+  const ao = new GTAOPass(scene, camera, innerWidth, innerHeight);
+  ao.updateGtaoMaterial({ radius: 0.5, distanceFallOff: 1, thickness: 1 });
+  ao.blendIntensity = 0.8;
+  composer.addPass(ao);
+}
+composer.addPass(new OutputPass());
+
+// ---------- helpers ----------
+const mats = new Map();
+const mat = (color, extra = {}) => {
+  const key = color + JSON.stringify(extra);
+  if (!mats.has(key)) mats.set(key, new THREE.MeshStandardMaterial({ color, roughness: 0.62, metalness: 0.02, ...extra }));
+  return mats.get(key);
+};
+const glow = (color, intensity = 1) => mat(color, { emissive: color, emissiveIntensity: intensity });
+const geos = new Map();
+const rgeo = (w, h, d, r) => {
+  const key = [w, h, d, r].join();
+  if (!geos.has(key)) geos.set(key, new RoundedBoxGeometry(w, h, d, 3, Math.min(r, w / 2, h / 2, d / 2) * 0.999));
+  return geos.get(key);
+};
+// Rounded box sitting on y=0 at its local origin (bottom-anchored).
+function rbox(w, h, d, color, { r = 0.08, x = 0, y = 0, z = 0, parent, m } = {}) {
+  const mesh = new THREE.Mesh(rgeo(w, h, d, r), m || mat(color));
+  mesh.position.set(x, y + h / 2, z);
+  mesh.castShadow = mesh.receiveShadow = true;
+  if (parent) parent.add(mesh);
+  return mesh;
+}
+function ball(rad, color, { x = 0, y = 0, z = 0, parent, m, seg = 16 } = {}) {
+  const mesh = new THREE.Mesh(new THREE.SphereGeometry(rad, seg, Math.round(seg * 0.7)), m || mat(color));
+  mesh.position.set(x, y, z);
+  mesh.castShadow = mesh.receiveShadow = true;
+  if (parent) parent.add(mesh);
+  return mesh;
+}
+function cyl(rt, rb, h, color, { x = 0, y = 0, z = 0, parent, m, seg = 24 } = {}) {
+  const mesh = new THREE.Mesh(new THREE.CylinderGeometry(rt, rb, h, seg), m || mat(color));
+  mesh.position.set(x, y + h / 2, z);
+  mesh.castShadow = mesh.receiveShadow = true;
+  if (parent) parent.add(mesh);
+  return mesh;
+}
+function person(color, { seated = false, helmet = null } = {}) {
+  const g = new THREE.Group();
+  const b = new THREE.Mesh(new THREE.CapsuleGeometry(0.1, seated ? 0.18 : 0.24, 4, 10), mat(color));
+  b.position.y = seated ? 0.52 : 0.24; b.castShadow = true;
+  g.add(b);
+  const head = ball(helmet ? 0.1 : 0.085, helmet ?? C.skin, { y: seated ? 0.78 : 0.52, parent: g, seg: 12 });
+  g.userData.head = head;
+  return g;
+}
+
+// Build-in registry: every piece rises and pops with a little overshoot during the first second.
+const pieces = [];
+function piece(obj, delay) {
+  obj.userData.baseY = obj.position.y;
+  obj.userData.baseScale = obj.scale.clone();
+  obj.userData.delay = delay;
+  pieces.push(obj);
+  scene.add(obj);
+  return obj;
+}
+const easeOutBack = (t, s = 1.9) => 1 + (s + 1) * Math.pow(t - 1, 3) + s * Math.pow(t - 1, 2);
+const smooth = (t) => t * t * (3 - 2 * t);
+const clamp01 = (t) => Math.min(1, Math.max(0, t));
+const TAU = Math.PI * 2;
+// Seeded random so every render places things the same way.
+let seed = 11;
+const rand = () => ((seed = (seed * 16807) % 2147483647) - 1) / 2147483646;
+
+// ---------- the world ----------
+// Layout (from the sketch, top of the page = back of the diorama):
+//   back: the large biking arena, fenced with tyres      front, centre-right: the lounge, facing it
+//   left, middle: gel blasters arena with cover           left, front: archery range with 3 targets
+const GY = 0.2;
+
+const slab = new THREE.Group();
+rbox(17, 0.9, 17, C.slabSide, { r: 0.6, y: -0.9, parent: slab });
+rbox(16.6, 0.12, 16.6, C.slab, { r: 0.06, y: -0.12, parent: slab });
+rbox(15.6, 0.2, 15.6, C.yard, { r: 0.1, parent: slab });
+piece(slab, 0);
+
+// --- Biking arena: dirt oval, tyre fence, track, jumps
+const ARENA = { x: 0.8, z: -3.9, rx: 7.0, rz: 3.7 };
+const arena = new THREE.Group();
+const dirt = new THREE.Mesh(new THREE.CylinderGeometry(1, 1, 0.06, 64), mat(C.dirt, { roughness: 0.95 }));
+dirt.scale.set(ARENA.rx, 1, ARENA.rz);
+dirt.position.set(ARENA.x, GY + 0.03, ARENA.z);
+dirt.receiveShadow = true;
+arena.add(dirt);
+// racing line (darker, worn earth)
+const ring = new THREE.Mesh(new THREE.RingGeometry(0.78, 0.94, 96), mat(C.track, { roughness: 1 }));
+ring.rotation.x = -Math.PI / 2;
+ring.scale.set(ARENA.rx * 0.92, ARENA.rz * 0.92, 1);
+ring.position.set(ARENA.x, GY + 0.065, ARENA.z);
+ring.receiveShadow = true;
+arena.add(ring);
+piece(arena, 0.05);
+
+// track the quads follow: an ellipse inside the fence
+const trackPts = [];
+for (let i = 0; i < 160; i++) {
+  const a = (i / 160) * TAU;
+  trackPts.push(new THREE.Vector3(ARENA.x + Math.cos(a) * ARENA.rx * 0.79, 0, ARENA.z + Math.sin(a) * ARENA.rz * 0.79));
+}
+const trackPath = new THREE.CatmullRomCurve3(trackPts, true, "centripetal");
+
+// two dirt jumps on the straights
+const JUMPS = [0.25, 0.75];
+const jumps = new THREE.Group();
+JUMPS.forEach((s) => {
+  const p = trackPath.getPointAt(s), t = trackPath.getTangentAt(s);
+  const ramp = new THREE.Mesh(new THREE.CylinderGeometry(0.9, 1.2, 0.36, 24, 1), mat(C.mound, { roughness: 1 }));
+  ramp.scale.set(1, 1, 0.6);
+  ramp.position.set(p.x, GY + 0.18, p.z);
+  ramp.rotation.y = Math.atan2(-t.z, t.x);
+  ramp.castShadow = ramp.receiveShadow = true;
+  jumps.add(ramp);
+});
+piece(jumps, 0.12);
+
+// tyre fence: stacks of two along the arena edge, with a gate gap facing the lounge
+const GATE = 0.25; // ellipse angle fraction of the gate (front, toward the lounge)
+const tyreGeo = new THREE.TorusGeometry(0.24, 0.1, 10, 20);
+tyreGeo.rotateX(Math.PI / 2);
+const tyreSpots = [];
+{
+  const n = 64;
+  for (let i = 0; i < n; i++) {
+    const f = i / n;
+    if (Math.abs(f - GATE) < 0.022) continue; // leave the gate open
+    const a = f * TAU;
+    const x = ARENA.x + Math.cos(a) * (ARENA.rx + 0.15), z = ARENA.z + Math.sin(a) * (ARENA.rz + 0.15);
+    for (let k = 0; k < 2; k++) tyreSpots.push({ x, z, y: GY + 0.1 + k * 0.19, painted: i % 9 === 0 && k === 1 });
+  }
+}
+const tyres = new THREE.InstancedMesh(tyreGeo, mat(0xffffff, { roughness: 0.85 }), tyreSpots.length);
+{
+  const m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), sc = new THREE.Vector3(1, 1, 1), pos = new THREE.Vector3();
+  const rubber = new THREE.Color(C.rubber), red = new THREE.Color(C.red), sand = new THREE.Color(C.sand);
+  tyreSpots.forEach((t, i) => {
+    m4.compose(pos.set(t.x, t.y, t.z), q, sc);
+    tyres.setMatrixAt(i, m4);
+    tyres.setColorAt(i, t.painted ? (i % 2 ? red : sand) : rubber);
+  });
+}
+tyres.castShadow = tyres.receiveShadow = true;
+const fence = new THREE.Group();
+fence.add(tyres);
+// red-and-white flags on poles around the arena
+for (const f of [0.08, 0.42, 0.58, 0.92]) {
+  const a = f * TAU;
+  const x = ARENA.x + Math.cos(a) * (ARENA.rx + 0.5), z = ARENA.z + Math.sin(a) * (ARENA.rz + 0.5);
+  cyl(0.03, 0.03, 1.6, C.white, { x, z, y: GY, parent: fence, seg: 8 });
+  const flag = rbox(0.5, 0.3, 0.02, C.red, { r: 0.01, x: x + 0.25, z, y: GY + 1.25, parent: fence });
+  flag.userData.flag = true;
+}
+piece(fence, 0.18);
+const flags = fence.children.filter((c) => c.userData.flag);
+
+// gate: two red posts and a crossbar where the walkway meets the fence
+const GATE_P = new THREE.Vector3(ARENA.x + Math.cos(GATE * TAU) * (ARENA.rx + 0.15), GY, ARENA.z + Math.sin(GATE * TAU) * (ARENA.rz + 0.15));
+const gate = new THREE.Group();
+for (const dx of [-0.75, 0.75]) rbox(0.16, 1.7, 0.16, C.red, { r: 0.04, x: dx, parent: gate });
+rbox(1.7, 0.26, 0.16, C.black, { r: 0.04, y: 1.62, parent: gate });
+rbox(1.2, 0.08, 0.17, C.red, { r: 0.02, y: 1.7, parent: gate });
+gate.position.copy(GATE_P);
+piece(gate, 0.3);
+
+// cones on the infield
+const cones = new THREE.Group();
+for (const [dx, dz] of [[-3, -0.2], [-1.2, 0.6], [1.4, -0.5], [3.2, 0.4]]) {
+  const c = new THREE.Mesh(new THREE.ConeGeometry(0.14, 0.36, 12), mat(C.red));
+  c.position.set(ARENA.x + dx, GY + 0.24, ARENA.z + dz);
+  c.castShadow = true;
+  cones.add(c);
+  rbox(0.3, 0.04, 0.3, C.white, { r: 0.01, x: ARENA.x + dx, y: GY + 0.06, z: ARENA.z + dz, parent: cones });
+}
+piece(cones, 0.22);
+
+// --- Quad bikes: 5 on the track, one lap per loop each (seamless)
+function quad(color) {
+  const g = new THREE.Group();
+  const frame = new THREE.Group();
+  g.add(frame);
+  rbox(0.82, 0.22, 0.46, color, { r: 0.08, y: 0.2, parent: frame });
+  rbox(0.34, 0.12, 0.3, C.black, { r: 0.05, x: -0.08, y: 0.42, parent: frame }); // seat
+  rbox(0.26, 0.12, 0.5, color, { r: 0.05, x: 0.32, y: 0.36, parent: frame }); // front rack
+  rbox(0.05, 0.05, 0.42, C.black, { r: 0.02, x: 0.2, y: 0.56, parent: frame }); // handlebar
+  const wheels = [];
+  for (const [x, z] of [[0.3, 0.27], [-0.3, 0.27], [0.3, -0.27], [-0.3, -0.27]]) {
+    const w = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.15, 0.14, 14), mat(C.rubber, { roughness: 0.9 }));
+    w.rotation.x = Math.PI / 2;
+    w.position.set(x, 0.15, z);
+    w.castShadow = true;
+    g.add(w);
+    wheels.push(w);
+  }
+  const rider = person(C.black, { helmet: color === C.red ? C.white : C.red });
+  rider.position.set(-0.06, 0.3, 0);
+  rider.scale.setScalar(0.95);
+  frame.add(rider);
+  g.userData.frame = frame;
+  return g;
+}
+const quads = [C.red, C.sand, C.black, C.red, C.white].map((c, i) => {
+  const g = quad(c);
+  g.userData.offset = i / 5;
+  g.userData.lane = (i % 2 ? 1 : -1) * 0.22;
+  g.scale.setScalar(1.35);
+  return piece(g, 0.7 + i * 0.04);
+});
+// dust kicked up behind each quad
+const dustMat = new THREE.MeshStandardMaterial({ color: 0xc8a77a, roughness: 1, transparent: true, opacity: 0.4, depthWrite: false });
+const dust = [];
+quads.forEach((q, qi) => {
+  for (let k = 0; k < 4; k++) {
+    const m = new THREE.Mesh(new THREE.SphereGeometry(0.16, 10, 8), dustMat.clone());
+    m.userData = { q: qi, phase: k / 4 };
+    scene.add(m);
+    dust.push(m);
+  }
+});
+
+// --- Walkway from the lounge to the arena gate
+const walk = new THREE.Group();
+const LOUNGE = { x: 2.6, z: 4.0, w: 5.6, d: 3.6 };
+{
+  const z0 = GATE_P.z + 0.35, z1 = LOUNGE.z - LOUNGE.d / 2;
+  const len = z1 - z0;
+  rbox(1.3, 0.05, len, C.concrete, { r: 0.03, x: GATE_P.x, z: z0 + len / 2, y: GY, parent: walk });
+  for (let i = 0; i < Math.floor(len / 0.55); i++) rbox(1.32, 0.02, 0.05, 0x77756f, { r: 0.01, x: GATE_P.x, z: z0 + 0.3 + i * 0.55, y: GY + 0.05, parent: walk });
+}
+piece(walk, 0.26);
+
+// --- Lounge: open-sided shade facing the arena; card tables, a bench of spectators, a counter
+const lounge = new THREE.Group();
+const LW = LOUNGE.w, LD = LOUNGE.d;
+rbox(LW, 0.14, LD, C.woodDark, { r: 0.06, parent: lounge }); // deck
+for (const x of [-LW / 2 + 0.2, 0, LW / 2 - 0.2]) for (const z of [-LD / 2 + 0.2, LD / 2 - 0.2]) rbox(0.14, 2.3, 0.14, C.black, { r: 0.04, x, z, y: 0.14, parent: lounge });
+// slatted shade roof (open slats so the card tables show from above)
+for (let i = 0; i < 9; i++) rbox(LW + 0.4, 0.08, 0.16, C.grey, { r: 0.03, y: 2.48, z: -LD / 2 - 0.1 + i * ((LD + 0.2) / 8), parent: lounge });
+for (const x of [-LW / 2, 0, LW / 2]) rbox(0.14, 0.12, LD + 0.4, C.black, { r: 0.03, x, y: 2.44, parent: lounge });
+rbox(LW + 0.42, 0.18, 0.06, C.red, { r: 0.02, y: 2.44, z: (LD + 0.4) / 2, parent: lounge }); // red fascia
+rbox(LW + 0.42, 0.18, 0.06, C.red, { r: 0.02, y: 2.44, z: -(LD + 0.4) / 2, parent: lounge });
+// back wall + ticket counter (back = +z, away from the arena)
+rbox(LW - 0.3, 1.1, 0.12, C.grey, { r: 0.04, z: LD / 2 - 0.1, y: 0.14, parent: lounge });
+rbox(1.6, 0.9, 0.5, C.sand, { r: 0.05, x: LW / 2 - 1.2, z: LD / 2 - 0.5, y: 0.14, parent: lounge });
+rbox(1.7, 0.06, 0.6, C.black, { r: 0.02, x: LW / 2 - 1.2, z: LD / 2 - 0.5, y: 1.04, parent: lounge });
+const staff = person(C.red);
+staff.position.set(LW / 2 - 1.2, 0.14, LD / 2 - 0.15);
+staff.rotation.y = Math.PI;
+lounge.add(staff);
+// card tables (green felt) with players; one card on each table gets dealt in turn
+const cards = [];
+const players = [];
+[[-1.7, 0.35], [-0.1, 0.2], [1.3, 0.55]].forEach(([tx, tz], ti) => {
+  const t = new THREE.Group();
+  t.position.set(tx, 0.14, tz);
+  lounge.add(t);
+  cyl(0.06, 0.1, 0.6, C.black, { parent: t, seg: 10 });
+  rbox(0.85, 0.06, 0.85, C.felt, { r: 0.03, y: 0.6, parent: t });
+  const seats = [[0, 0.62], [0, -0.62], [0.62, 0], [-0.62, 0]].slice(0, ti === 1 ? 4 : 3);
+  seats.forEach(([sx, sz], k) => {
+    rbox(0.3, 0.36, 0.3, C.black, { r: 0.05, x: sx, z: sz, parent: t });
+    const p = person([C.red, C.sand, C.white, C.grey][(ti + k) % 4], { seated: true });
+    p.position.set(sx, 0, sz);
+    p.rotation.y = Math.atan2(-sx, -sz);
+    t.add(p);
+    players.push(p);
+  });
+  // a little fan of cards and a pile in the middle
+  for (let c = 0; c < 3; c++) rbox(0.12, 0.01, 0.17, C.white, { r: 0.005, x: -0.12 + c * 0.12, y: 0.66, z: -0.05, parent: t });
+  const dealt = rbox(0.12, 0.012, 0.17, C.white, { r: 0.005, y: 0.67, parent: t });
+  dealt.userData = { t: ti, home: dealt.position.clone() };
+  cards.push(dealt);
+});
+// bench of spectators at the open front, watching the arena
+rbox(2.6, 0.38, 0.4, C.wood, { r: 0.05, x: -0.6, z: -LD / 2 + 0.45, y: 0.14, parent: lounge });
+const watchers = [];
+for (let k = 0; k < 4; k++) {
+  const p = person([C.sand, C.red, C.white, C.grey][k], { seated: true });
+  p.position.set(-1.6 + k * 0.65, 0.1, -LD / 2 + 0.45);
+  p.rotation.y = Math.PI; // face the arena
+  lounge.add(p);
+  watchers.push(p);
+}
+lounge.position.set(LOUNGE.x, GY, LOUNGE.z);
+piece(lounge, 0.34);
+
+// --- Gel blasters arena: netted pen with cover; two teams trade gel shots
+const GEL = { x: -5.6, z: 1.5, w: 4.8, d: 3.4 };
+const gel = new THREE.Group();
+rbox(GEL.w, 0.05, GEL.d, C.turf, { r: 0.04, parent: gel });
+// netting: posts with translucent dark panels
+const netMat = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 1, transparent: true, opacity: 0.28, depthWrite: false, side: THREE.DoubleSide });
+const corners = [[-GEL.w / 2, -GEL.d / 2], [GEL.w / 2, -GEL.d / 2], [GEL.w / 2, GEL.d / 2], [-GEL.w / 2, GEL.d / 2]];
+corners.forEach(([x, z]) => rbox(0.08, 1.5, 0.08, C.black, { r: 0.02, x, z, parent: gel }));
+for (let i = 0; i < 4; i++) {
+  const [x0, z0] = corners[i], [x1, z1] = corners[(i + 1) % 4];
+  const len = Math.hypot(x1 - x0, z1 - z0);
+  const net = new THREE.Mesh(new THREE.PlaneGeometry(len, 1.3), netMat);
+  net.position.set((x0 + x1) / 2, 0.75, (z0 + z1) / 2);
+  net.rotation.y = -Math.atan2(z1 - z0, x1 - x0);
+  gel.add(net);
+}
+// cover: crates, barrels, low walls, a tyre stack (roughly where the sketch puts them)
+rbox(0.7, 0.7, 0.7, C.wood, { r: 0.04, x: -1.7, z: -1.0, parent: gel });
+rbox(0.55, 0.55, 0.55, C.wood, { r: 0.04, x: -1.6, z: -0.35, parent: gel });
+rbox(1.3, 0.75, 0.25, C.concrete, { r: 0.05, x: -0.3, z: -0.6, parent: gel });
+rbox(0.25, 0.75, 1.1, C.concrete, { r: 0.05, x: 0.9, z: 0.5, parent: gel });
+for (const [x, z, c] of [[-0.9, 0.9, C.red], [-0.6, 1.1, C.black], [1.7, -0.9, C.red]]) cyl(0.22, 0.22, 0.7, c, { x, z, parent: gel, seg: 18 });
+for (let k = 0; k < 3; k++) {
+  const t = new THREE.Mesh(tyreGeo, mat(C.rubber, { roughness: 0.85 }));
+  t.position.set(1.8, 0.1 + k * 0.19, 1.0);
+  t.castShadow = true;
+  gel.add(t);
+}
+// two teams (red vests vs sand vests) peeking out from cover
+const shooters = [
+  { x: -1.95, z: -0.2, team: C.red, aim: 0.0 },
+  { x: -0.3, z: -0.95, team: C.red, aim: 0.5 },
+  { x: 1.25, z: 0.5, team: C.sand, aim: Math.PI },
+  { x: 1.7, z: -0.45, team: C.sand, aim: Math.PI + 0.4 },
+].map((s, i) => {
+  const p = person(s.team, { helmet: C.black });
+  rbox(0.3, 0.07, 0.07, C.black, { r: 0.02, x: 0.16, y: 0.36, parent: p }); // blaster
+  p.position.set(s.x, 0.05, s.z);
+  p.rotation.y = s.aim;
+  p.userData.phase = i / 4;
+  gel.add(p);
+  return p;
+});
+gel.position.set(GEL.x, GY, GEL.z);
+piece(gel, 0.4);
+// gel pellets flying between the teams (glowing)
+const pellets = [];
+const pelletPairs = [[0, 2], [2, 0], [1, 3], [3, 1], [0, 3], [2, 1]];
+pelletPairs.forEach(([a, b], i) => {
+  const m = new THREE.Mesh(new THREE.SphereGeometry(0.045, 10, 8), glow(i % 2 ? C.gelA : C.gelB, 1.2));
+  m.userData = { a, b, phase: i / pelletPairs.length };
+  scene.add(m);
+  pellets.push(m);
+});
+const tmpA = new THREE.Vector3(), tmpB = new THREE.Vector3();
+
+// --- Archery range: 3 targets along the left edge, archers at the shooting line
+const ARCH = { x: -5.6, z: 5.6 };
+const archery = new THREE.Group();
+rbox(4.8, 0.05, 3.6, C.turfDark, { r: 0.04, parent: archery });
+rbox(0.06, 0.02, 3.4, C.white, { r: 0.01, x: 1.4, y: 0.05, parent: archery }); // shooting line
+const TARGET_X = -1.95;
+const targets = [];
+[-1.2, 0, 1.2].forEach((tz) => {
+  const t = new THREE.Group();
+  t.position.set(TARGET_X, 0.05, tz);
+  archery.add(t);
+  // A-frame stand
+  for (const dz of [-0.28, 0.28]) {
+    const leg = rbox(0.07, 1.3, 0.07, C.wood, { r: 0.02, z: dz, parent: t });
+    leg.rotation.z = 0.12;
+  }
+  // target face (rings), facing the archers (+x)
+  const face = new THREE.Group();
+  face.position.set(0.06, 0.95, 0);
+  face.rotation.z = -0.12;
+  t.add(face);
+  [[0.42, C.white], [0.34, C.black], [0.26, C.blue], [0.18, C.red], [0.1, C.gold]].forEach(([r, c], k) => {
+    const disc = new THREE.Mesh(new THREE.CylinderGeometry(r, r, 0.04 + k * 0.012, 28), mat(c));
+    disc.rotation.z = Math.PI / 2;
+    disc.castShadow = k === 0;
+    face.add(disc);
+  });
+  targets.push({ t, face, z: tz });
+});
+// shooting stands ("U" marks in the sketch) and archers with bows
+const archers = [-1.2, 0, 1.2].map((az, i) => {
+  rbox(0.5, 0.04, 0.5, C.sand, { r: 0.02, x: 1.75, y: 0.05, z: az, parent: archery });
+  const p = person([C.white, C.red, C.sand][i]);
+  p.position.set(1.75, 0.08, az);
+  p.rotation.y = Math.PI; // face the targets (-x)
+  const bow = new THREE.Mesh(new THREE.TorusGeometry(0.22, 0.015, 6, 16, Math.PI), mat(C.woodDark));
+  bow.position.set(-0.16, 0.36, 0);
+  bow.rotation.set(0, Math.PI / 2, Math.PI / 2);
+  p.add(bow);
+  archery.add(p);
+  return p;
+});
+archery.position.set(ARCH.x, GY, ARCH.z);
+piece(archery, 0.46);
+// arrows: each archer looses one every 2.5s (4 per loop); it flies, sticks, then fades before the next
+const arrowGeo = new THREE.CylinderGeometry(0.012, 0.012, 0.5, 6);
+arrowGeo.rotateZ(Math.PI / 2);
+const arrows = archers.map((a, i) => {
+  const m = new THREE.Mesh(arrowGeo, mat(C.sand));
+  m.castShadow = true;
+  m.userData = { i, phase: i / 3 };
+  scene.add(m);
+  return m;
+});
+
+// --- Palms and a stack of spare tyres in the open front-right corner
+function palm(x, z, s, delay) {
+  const g = new THREE.Group();
+  for (let i = 0; i < 6; i++) cyl(0.11 * s, 0.13 * s, 0.42 * s, C.trunk, { x: Math.sin(i * 0.3) * 0.08 * s, y: i * 0.4 * s, parent: g, seg: 10 });
+  const crown = new THREE.Group();
+  crown.position.set(0.12 * s, 2.45 * s, 0);
+  g.add(crown);
+  for (let k = 0; k < 8; k++) {
+    const holder = new THREE.Group();
+    rbox(1.25 * s, 0.05, 0.3 * s, k % 2 ? C.palm : C.palmDark, { r: 0.02, x: 0.6 * s, parent: holder });
+    holder.rotation.set(0, (k / 8) * TAU, -0.45);
+    crown.add(holder);
+  }
+  g.userData.crown = crown;
+  g.position.set(x, GY, z);
+  return piece(g, delay);
+}
+const palms = [palm(7.0, 1.8, 0.95, 0.55), palm(6.8, 6.9, 1.05, 0.58), palm(-7.4, -7.3, 1.0, 0.5), palm(7.2, -7.4, 0.9, 0.52)];
+const spare = new THREE.Group();
+for (let k = 0; k < 4; k++) {
+  const t = new THREE.Mesh(tyreGeo, mat(k === 3 ? C.red : C.rubber, { roughness: 0.85 }));
+  t.position.set(0, 0.1 + k * 0.19, 0);
+  t.castShadow = true;
+  spare.add(t);
+}
+spare.position.set(6.6, GY, 4.6);
+piece(spare, 0.62);
+
+// ---------- animation ----------
+const start = performance.now();
+const tmp = new THREE.Vector3();
+
+function frame(now) {
+  const elapsed = STILL !== null ? STILL + 1.2 : REDUCED ? 3 : (now - start) / 1000;
+  const build = elapsed;
+  const t = Math.max(0, elapsed - 1.2);
+  const u = (t % LOOP) / LOOP;
+
+  for (const p of pieces) {
+    const k = clamp01((build - p.userData.delay) / 0.55);
+    const s = k <= 0 ? 0.0001 : easeOutBack(k);
+    p.scale.copy(p.userData.baseScale).multiplyScalar(Math.max(0.0001, s));
+    p.position.y = p.userData.baseY + (1 - smooth(k)) * -1.2;
+    p.visible = k > 0;
+  }
+
+  // camera: slow eased orbit + gentle push-in, both periodic so the loop has no jump
+  const theta = VIEW + 0.25 * Math.sin(u * TAU);
+  const push = 0.5 - 0.5 * Math.cos(u * TAU);
+  const dist = fitDist() * (1 - 0.1 * push);
+  const phi = 0.62;
+  camera.position.set(
+    target.x + Math.sin(theta) * Math.cos(phi) * dist,
+    target.y + Math.sin(phi) * dist,
+    target.z + Math.cos(theta) * Math.cos(phi) * dist);
+  camera.lookAt(target);
+
+  const live = build > 1;
+  if (t > 0) {
+    // quads: one lap per loop, bouncing over the jumps
+    quads.forEach((q, qi) => {
+      const s = (u + q.userData.offset) % 1;
+      const p = trackPath.getPointAt(s), tan = trackPath.getTangentAt(s);
+      const n = tmp.set(-tan.z, 0, tan.x).multiplyScalar(q.userData.lane);
+      let lift = 0;
+      for (const j of JUMPS) {
+        const d = Math.abs(((s - j + 1.5) % 1) - 0.5);
+        if (d < 0.03) lift = Math.max(lift, Math.sin((1 - d / 0.03) * Math.PI / 2) * 0.45);
+      }
+      q.position.set(p.x + n.x, q.userData.baseY + lift, p.z + n.z);
+      q.rotation.y = Math.atan2(-tan.z, tan.x);
+      q.userData.frame.rotation.z = lift * 0.35;
+    });
+    dust.forEach((d) => {
+      const q = quads[d.userData.q];
+      const f = (u * 8 + d.userData.phase) % 1;
+      const s = (u + q.userData.offset - f * 0.015 + 1) % 1;
+      const p = trackPath.getPointAt(s);
+      d.visible = live;
+      d.position.set(p.x, GY + 0.12 + f * 0.35, p.z);
+      d.scale.setScalar(0.5 + f * 1.6);
+      d.material.opacity = 0.35 * Math.sin(f * Math.PI);
+    });
+    // gel shots: each pellet crosses between two players, 3 volleys per loop
+    pellets.forEach((m) => {
+      const f = (u * 3 + m.userData.phase) % 1;
+      const a = shooters[m.userData.a], b = shooters[m.userData.b];
+      a.getWorldPosition(tmpA); b.getWorldPosition(tmpB);
+      tmpA.y += 0.38; tmpB.y += 0.38;
+      m.visible = live && f < 0.35;
+      m.position.lerpVectors(tmpA, tmpB, clamp01(f / 0.35));
+      m.position.y += Math.sin(clamp01(f / 0.35) * Math.PI) * 0.15;
+    });
+    // arrows: draw, fly (0.0-0.12 of a cycle), stick, fade out before the next shot
+    arrows.forEach((ar) => {
+      const f = (u * 4 + ar.userData.phase) % 1;
+      const A = archers[ar.userData.i], T = targets[ar.userData.i];
+      A.getWorldPosition(tmpA); T.face.getWorldPosition(tmpB);
+      tmpA.y += 0.4; tmpA.x -= 0.2;
+      tmpB.x += 0.08;
+      const k = smooth(clamp01((f - 0.18) / 0.12));
+      ar.visible = live && f > 0.18 && f < 0.92;
+      ar.position.lerpVectors(tmpA, tmpB, k);
+      ar.position.y += Math.sin(k * Math.PI) * 0.18;
+      ar.rotation.z = (1 - k) * 0.1;
+      ar.scale.setScalar(f > 0.85 ? Math.max(0.001, 1 - (f - 0.85) / 0.07) : 1);
+    });
+  }
+
+  // archers draw their bows before each shot
+  archers.forEach((p, i) => {
+    const f = (u * 4 + i / 3) % 1;
+    p.rotation.z = -0.06 * smooth(clamp01(f / 0.18)) * (f < 0.3 ? 1 : 0);
+  });
+  // gel players peek out from cover
+  shooters.forEach((p) => {
+    const k = 0.5 + 0.5 * Math.sin((u * 3 + p.userData.phase) * TAU);
+    p.position.y = 0.05 + (k - 0.5) * 0.12;
+    p.scale.y = 0.85 + 0.15 * k;
+  });
+  // cards get dealt, one table after another
+  cards.forEach((c) => {
+    const f = (u * 3 + c.userData.t / 3) % 1;
+    const k = smooth(clamp01(f / 0.2));
+    c.position.copy(c.userData.home);
+    c.position.x += Math.sin(k * Math.PI) * 0.04;
+    c.position.y += Math.sin(k * Math.PI) * 0.1;
+    c.rotation.z = k * Math.PI;
+  });
+  // spectators react as the quads pass the gate
+  watchers.forEach((w, i) => (w.position.y = 0.1 + Math.max(0, Math.sin((u * 5 + i * 0.15) * TAU)) * 0.05));
+  players.forEach((p, i) => (p.rotation.z = Math.sin((u * 2 + i * 0.3) * TAU) * 0.04));
+  flags.forEach((f, i) => (f.rotation.y = Math.sin((u * 4 + i * 0.25) * TAU) * 0.25));
+  palms.forEach((p, i) => (p.userData.crown.rotation.z = Math.sin((u * 2 + i / 4) * TAU) * 0.05));
+
+  composer.render();
+  if (onScreen) requestAnimationFrame(frame);
+  else paused = true;
+}
+
+let onScreen = true, paused = false;
+new IntersectionObserver(([e]) => {
+  onScreen = e.isIntersecting;
+  if (onScreen && paused) { paused = false; requestAnimationFrame(frame); }
+}).observe(document.documentElement);
+requestAnimationFrame(frame);
+
+addEventListener("resize", () => {
+  frameView();
+  renderer.setSize(innerWidth, innerHeight);
+  composer.setSize(innerWidth, innerHeight);
+});
+</script>
+</body>
+</html>
