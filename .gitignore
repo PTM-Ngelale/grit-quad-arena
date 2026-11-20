@@ -27,3 +27,7 @@ yarn-error.log*
 next-env.d.ts
 
 .vercel
+
+# local media
+brag-output*/
+rough-sketch.jpg
